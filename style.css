@@ -1,0 +1,37 @@
+/* Extra polish */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+#txList::-webkit-scrollbar {
+  width: 6px;
+}
+#txList::-webkit-scrollbar-track {
+  background: transparent;
+}
+#txList::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.dark #txList::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* Smooth number transition */
+#balance, #totalIncome, #totalExpense {
+  transition: color 0.3s ease;
+}
+
+/* Transaction item hover */
+.tx-item {
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.tx-item:hover {
+  transform: translateX(2px);
+}
+
+/* Chart container fix for dark mode */
+canvas {
+  max-width: 100%;
+}
