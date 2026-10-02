@@ -44,6 +44,7 @@
 
   <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
 
+    <!-- Summary -->
     <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
         <p class="text-sm text-gray-500 dark:text-gray-400" id="labelBalance">Baki</p>
@@ -59,9 +60,10 @@
       </div>
     </section>
 
+    <!-- Form -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
       <h2 class="font-semibold text-lg mb-4" id="labelAddTx">Tambah Transaksi</h2>
-      <form id="txForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+      <form id="txForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         <input type="hidden" id="editId" value="">
         <div>
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelType">Jenis</label>
@@ -79,6 +81,14 @@
           <select id="category" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2"></select>
         </div>
         <div>
+          <label class="text-xs text-gray-500 dark:text-gray-400" id="labelPayment">Cara Bayar</label>
+          <select id="payment" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2">
+            <option value="cash" id="optCash">Cash</option>
+            <option value="banking" id="optBanking">Banking</option>
+            <option value="qr" id="optQR">QR</option>
+          </select>
+        </div>
+        <div>
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelDate">Tarikh</label>
           <input type="date" id="date" required class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2" />
         </div>
@@ -86,13 +96,14 @@
           <button type="submit" id="btnAdd" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-4 py-2.5">Tambah</button>
           <button type="button" id="btnCancelEdit" class="hidden px-3 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm">Batal</button>
         </div>
-        <div class="sm:col-span-2 lg:col-span-5">
+        <div class="sm:col-span-2 lg:col-span-3">
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelNote">Nota (optional)</label>
           <input type="text" id="note" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2" />
         </div>
       </form>
     </section>
 
+    <!-- Charts -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
         <h2 class="font-semibold text-lg mb-4" id="labelPie">Perbelanjaan ikut Kategori</h2>
@@ -104,14 +115,11 @@
       </div>
     </section>
 
+    <!-- Transaction List -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <div class="flex items-center justify-between mb-4">
         <h2 class="font-semibold text-lg" id="labelList">Senarai Transaksi</h2>
-        <div class="flex gap-2 flex-wrap">
-          <button id="btnShareWA" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg">WhatsApp</button>
-          <button id="btnShareTG" class="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg">Telegram</button>
-          <button id="clearAll" class="text-sm text-red-500 hover:text-red-600 font-medium">Padam Semua</button>
-        </div>
+        <button id="clearAll" class="text-sm text-red-500 hover:text-red-600 font-medium">Padam Semua</button>
       </div>
       <div id="txList" class="space-y-3 max-h-[28rem] overflow-y-auto"></div>
       <p id="emptyState" class="text-center text-gray-400 py-8 hidden">Belum ada transaksi.</p>
@@ -119,9 +127,9 @@
 
     <!-- Sejarah Bulanan (Auto) -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-      <h2 class="font-semibold text-lg mb-2" id="labelHistory">Sejarah Bulanan</h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4" id="historyHelp">Auto disimpan. Klik bulan untuk lihat hari demi hari. Boleh kongsi terus.</p>
-      <div id="historyList" class="space-y-2 max-h-80 overflow-y-auto"></div>
+      <h2 class="font-semibold text-lg mb-1" id="labelHistory">Sejarah Bulanan</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4" id="historyHelp">Auto disimpan. Klik bulan untuk lihat hari. Boleh kongsi bulan atau hari.</p>
+      <div id="historyList" class="space-y-2 max-h-96 overflow-y-auto"></div>
       <p id="emptyHistory" class="text-center text-gray-400 py-4 text-sm hidden">Belum ada data.</p>
     </section>
 
@@ -138,14 +146,17 @@ const translations = {
   ms: {
     balance: 'Baki', income: 'Pendapatan', expense: 'Perbelanjaan',
     addTx: 'Tambah Transaksi', editTx: 'Edit Transaksi', type: 'Jenis', amount: 'Jumlah (RM)',
-    category: 'Kategori', date: 'Tarikh', note: 'Nota (optional)', notePlaceholder: 'Contoh: Makan tengah hari',
-    add: 'Tambah', update: 'Kemaskini', cancel: 'Batal', pie: 'Perbelanjaan ikut Kategori', bar: 'Trend Bulanan',
+    category: 'Kategori', payment: 'Cara Bayar', date: 'Tarikh', note: 'Nota (optional)',
+    notePlaceholder: 'Contoh: Makan tengah hari',
+    add: 'Tambah', update: 'Kemaskini', cancel: 'Batal',
+    pie: 'Perbelanjaan ikut Kategori', bar: 'Trend Bulanan',
     list: 'Senarai Transaksi', clearAll: 'Padam Semua', empty: 'Belum ada transaksi.',
     allMonths: 'Semua Bulan', noData: 'Tiada data', footer: 'ChiiTracker • Data disimpan di browser anda',
     optExpense: 'Perbelanjaan', optIncome: 'Pendapatan',
+    optCash: 'Cash', optBanking: 'Banking', optQR: 'QR',
     deleteConfirm: 'Padam transaksi ini?', clearConfirm: 'Padam SEMUA transaksi?',
-    history: 'Sejarah Bulanan', historyHelp: 'Auto disimpan. Klik bulan untuk lihat hari demi hari. Boleh kongsi terus.',
-    viewDays: 'Lihat Hari', share: 'Kongsi',
+    history: 'Sejarah Bulanan', historyHelp: 'Auto disimpan. Klik bulan untuk lihat hari. Boleh kongsi bulan atau hari.',
+    viewDays: 'Lihat Hari',
     categories: {
       expense: { makan: 'Makanan', transport: 'Pengangkutan', belanja: 'Belanja', bil: 'Bil & Utiliti', hiburan: 'Hiburan', kesihatan: 'Kesihatan', lain: 'Lain-lain' },
       income: { gaji: 'Gaji', freelance: 'Freelance', hadiah: 'Hadiah / Bonus', 'lain-income': 'Lain-lain' }
@@ -154,14 +165,17 @@ const translations = {
   en: {
     balance: 'Balance', income: 'Income', expense: 'Expense',
     addTx: 'Add Transaction', editTx: 'Edit Transaction', type: 'Type', amount: 'Amount (RM)',
-    category: 'Category', date: 'Date', note: 'Note (optional)', notePlaceholder: 'Example: Lunch',
-    add: 'Add', update: 'Update', cancel: 'Cancel', pie: 'Expenses by Category', bar: 'Monthly Trend',
+    category: 'Category', payment: 'Payment Method', date: 'Date', note: 'Note (optional)',
+    notePlaceholder: 'Example: Lunch',
+    add: 'Add', update: 'Update', cancel: 'Cancel',
+    pie: 'Expenses by Category', bar: 'Monthly Trend',
     list: 'Transaction List', clearAll: 'Clear All', empty: 'No transactions yet.',
     allMonths: 'All Months', noData: 'No data', footer: 'ChiiTracker • Data is stored in your browser',
     optExpense: 'Expense', optIncome: 'Income',
+    optCash: 'Cash', optBanking: 'Banking', optQR: 'QR',
     deleteConfirm: 'Delete this transaction?', clearConfirm: 'Delete ALL transactions?',
-    history: 'Monthly History', historyHelp: 'Auto saved. Click month to view day by day. You can share directly.',
-    viewDays: 'View Days', share: 'Share',
+    history: 'Monthly History', historyHelp: 'Auto saved. Click month to view days. Share month or day.',
+    viewDays: 'View Days',
     categories: {
       expense: { makan: 'Food', transport: 'Transport', belanja: 'Shopping', bil: 'Bills & Utilities', hiburan: 'Entertainment', kesihatan: 'Health', lain: 'Others' },
       income: { gaji: 'Salary', freelance: 'Freelance', hadiah: 'Gift / Bonus', 'lain-income': 'Others' }
@@ -174,6 +188,8 @@ const CATEGORY_COLORS = {
   income: { gaji: '#22c55e', freelance: '#84cc16', hadiah: '#eab308', 'lain-income': '#10b981' }
 };
 
+const PAYMENT_LABEL = { cash: 'Cash', banking: 'Banking', qr: 'QR' };
+
 let transactions = [];
 let pieChart = null;
 let barChart = null;
@@ -183,7 +199,7 @@ let editingId = null;
 document.addEventListener('DOMContentLoaded', () => {
   loadTheme(); loadLang(); loadTransactions();
   setupForm(); setupThemeToggle(); setupLangToggle();
-  setupMonthFilter(); setupClearAll(); setupShare();
+  setupMonthFilter(); setupClearAll();
   setDefaultDate(); updateCategoryOptions(); applyLanguage(); render();
 });function loadLang() { currentLang = localStorage.getItem(LANG_KEY) || 'ms'; }
 
@@ -196,6 +212,7 @@ function applyLanguage() {
   document.getElementById('labelType').textContent = t.type;
   document.getElementById('labelAmount').textContent = t.amount;
   document.getElementById('labelCategory').textContent = t.category;
+  document.getElementById('labelPayment').textContent = t.payment;
   document.getElementById('labelDate').textContent = t.date;
   document.getElementById('labelNote').textContent = t.note;
   document.getElementById('note').placeholder = t.notePlaceholder;
@@ -209,6 +226,9 @@ function applyLanguage() {
   document.getElementById('footerText').textContent = t.footer;
   document.getElementById('optExpense').textContent = t.optExpense;
   document.getElementById('optIncome').textContent = t.optIncome;
+  document.getElementById('optCash').textContent = t.optCash;
+  document.getElementById('optBanking').textContent = t.optBanking;
+  document.getElementById('optQR').textContent = t.optQR;
   document.getElementById('langToggle').textContent = currentLang === 'ms' ? 'EN' : 'BM';
   document.getElementById('labelHistory').textContent = t.history;
   document.getElementById('historyHelp').textContent = t.historyHelp;
@@ -281,6 +301,7 @@ function setupForm() {
     const type = document.getElementById('type').value;
     const amount = parseFloat(document.getElementById('amount').value);
     const category = document.getElementById('category').value;
+    const payment = document.getElementById('payment').value;
     const date = document.getElementById('date').value;
     const note = document.getElementById('note').value.trim();
     const editId = document.getElementById('editId').value;
@@ -291,11 +312,13 @@ function setupForm() {
 
     if (editId) {
       const idx = transactions.findIndex(tx => tx.id === editId);
-      if (idx !== -1) transactions[idx] = { ...transactions[idx], type, amount, category, date, note };
+      if (idx !== -1) {
+        transactions[idx] = { ...transactions[idx], type, amount, category, payment, date, note };
+      }
       cancelEdit();
     } else {
       transactions.unshift({
-        id: generateId(), type, amount, category, date, note,
+        id: generateId(), type, amount, category, payment, date, note,
         time: timeStr, createdAt: now.toISOString()
       });
     }
@@ -314,6 +337,7 @@ function startEdit(id) {
   document.getElementById('type').value = tx.type;
   updateCategoryOptions();
   document.getElementById('category').value = tx.category;
+  document.getElementById('payment').value = tx.payment || 'cash';
   document.getElementById('amount').value = tx.amount;
   document.getElementById('date').value = tx.date;
   document.getElementById('note').value = tx.note || '';
@@ -405,6 +429,7 @@ function renderList(list) {
     const isIncome = tx.type === 'income';
     const amountClass = isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
     const sign = isIncome ? '+' : '-';
+    const pay = PAYMENT_LABEL[tx.payment] || tx.payment || 'Cash';
     const noteHtml = tx.note ? '<p class="text-sm text-gray-600 dark:text-gray-300 mt-0.5 break-words">' + tx.note + '</p>' : '';
     const timeHtml = tx.time ? '<span class="text-xs text-gray-400 ml-2">🕒 ' + tx.time + '</span>' : '';
 
@@ -414,7 +439,7 @@ function renderList(list) {
     html += '<div class="flex-1 min-w-0">';
     html += '<div class="flex items-center justify-between gap-2"><p class="font-semibold">' + catName + '</p>';
     html += '<p class="font-bold ' + amountClass + '">' + sign + ' ' + formatRM(tx.amount) + '</p></div>';
-    html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">' + formatDate(tx.date) + timeHtml + '</p>';
+    html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">' + formatDate(tx.date) + timeHtml + ' • ' + pay + '</p>';
     html += noteHtml + '</div></div>';
     html += '<div class="flex justify-end gap-3 mt-3 pt-2 border-t border-gray-200 dark:border-gray-600">';
     html += '<button onclick="startEdit(\'' + tx.id + '\')" class="text-sm text-blue-500">✏️ Edit</button>';
@@ -444,17 +469,14 @@ function setupClearAll() {
   });
 }
 
-// ---------- Sejarah Bulanan (Auto) ----------
+// ---------- Sejarah Bulanan ----------
 function renderHistory() {
   const container = document.getElementById('historyList');
   const empty = document.getElementById('emptyHistory');
   const t = translations[currentLang];
-  const months = getAvailableMonths().filter(m => m.value !== 'all');
+  const months = getAvailableMonths().filter(m => transactions.some(tx => tx.date && tx.date.startsWith(m.value)));
 
-  // Only months that actually have data
-  const monthsWithData = months.filter(m => transactions.some(tx => tx.date && tx.date.startsWith(m.value)));
-
-  if (monthsWithData.length === 0) {
+  if (months.length === 0) {
     container.innerHTML = '';
     empty.classList.remove('hidden');
     return;
@@ -462,7 +484,7 @@ function renderHistory() {
   empty.classList.add('hidden');
 
   let html = '';
-  monthsWithData.forEach(m => {
+  months.forEach(m => {
     const monthTx = transactions.filter(tx => tx.date && tx.date.startsWith(m.value));
     let income = 0, expense = 0;
     monthTx.forEach(tx => { if (tx.type === 'income') income += tx.amount; else expense += tx.amount; });
@@ -476,7 +498,7 @@ function renderHistory() {
     html += '<button onclick="shareMonth(\'' + m.value + '\',\'wa\')" class="text-xs bg-green-500 text-white px-2 py-1 rounded">WA</button>';
     html += '<button onclick="shareMonth(\'' + m.value + '\',\'tg\')" class="text-xs bg-blue-500 text-white px-2 py-1 rounded">TG</button>';
     html += '</div></div>';
-    html += '<div id="days-' + m.value + '" class="hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2"></div>';
+    html += '<div id="days-' + m.value + '" class="hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-3"></div>';
     html += '</div>';
   });
   container.innerHTML = html;
@@ -497,15 +519,27 @@ function toggleMonthDays(monthKey) {
   const days = Object.keys(byDay).sort((a,b) => b.localeCompare(a));
   let html = '';
   days.forEach(day => {
-    html += '<div class="mb-2"><p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">' + formatDate(day) + '</p>';
+    let dayInc = 0, dayExp = 0;
+    byDay[day].forEach(tx => { if (tx.type === 'income') dayInc += tx.amount; else dayExp += tx.amount; });
+
+    html += '<div class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-100 dark:border-gray-600">';
+    html += '<div class="flex items-center justify-between mb-2">';
+    html += '<p class="text-sm font-semibold">' + formatDate(day) + '</p>';
+    html += '<div class="flex gap-1">';
+    html += '<button onclick="shareDay(\'' + day + '\',\'wa\')" class="text-xs bg-green-500 text-white px-2 py-0.5 rounded">WA</button>';
+    html += '<button onclick="shareDay(\'' + day + '\',\'tg\')" class="text-xs bg-blue-500 text-white px-2 py-0.5 rounded">TG</button>';
+    html += '</div></div>';
+    html += '<p class="text-xs text-gray-500 mb-2">+' + formatRM(dayInc) + ' / -' + formatRM(dayExp) + '</p>';
+
     byDay[day].forEach(tx => {
       const cat = getCategoryName(tx.type, tx.category);
       const isIncome = tx.type === 'income';
       const amountClass = isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
       const sign = isIncome ? '+' : '-';
+      const pay = PAYMENT_LABEL[tx.payment] || 'Cash';
       const time = tx.time ? ' • ' + tx.time : '';
       html += '<div class="flex justify-between text-sm py-0.5">';
-      html += '<span>' + cat + (tx.note ? ' - ' + tx.note : '') + time + '</span>';
+      html += '<span>' + cat + ' (' + pay + ')' + (tx.note ? ' - ' + tx.note : '') + time + '</span>';
       html += '<span class="font-medium ' + amountClass + '">' + sign + ' ' + formatRM(tx.amount) + '</span>';
       html += '</div>';
     });
@@ -515,34 +549,24 @@ function toggleMonthDays(monthKey) {
   detail.classList.remove('hidden');
 }
 
-// ---------- Share ----------
-function setupShare() {
-  document.getElementById('btnShareWA').addEventListener('click', () => shareCurrent('wa'));
-  document.getElementById('btnShareTG').addEventListener('click', () => shareCurrent('tg'));
-}
-
-function shareCurrent(platform) {
-  const month = document.getElementById('monthFilter').value;
-  if (month === 'all') {
-    // share current month
-    const now = new Date();
-    const key = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-    shareMonth(key, platform);
-  } else {
-    shareMonth(month, platform);
-  }
-}
-
 function shareMonth(monthKey, platform) {
   const list = transactions.filter(tx => tx.date && tx.date.startsWith(monthKey));
   const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
   const parts = monthKey.split('-');
   const label = new Date(parseInt(parts[0]), parseInt(parts[1])-1, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+  sendShare(list, label, platform);
+}
 
+function shareDay(day, platform) {
+  const list = transactions.filter(tx => tx.date === day);
+  sendShare(list, formatDate(day), platform);
+}
+
+function sendShare(list, title, platform) {
   let income = 0, expense = 0;
   list.forEach(tx => { if (tx.type === 'income') income += tx.amount; else expense += tx.amount; });
 
-  let text = '💰 *ChiiTracker* - ' + label + '\n\n';
+  let text = '💰 *ChiiTracker* - ' + title + '\n\n';
   text += '📈 Pendapatan: ' + formatRM(income) + '\n';
   text += '📉 Perbelanjaan: ' + formatRM(expense) + '\n';
   text += '💵 Baki: ' + formatRM(income - expense) + '\n\n--- Senarai ---\n';
@@ -550,8 +574,9 @@ function shareMonth(monthKey, platform) {
   list.forEach(tx => {
     const cat = getCategoryName(tx.type, tx.category);
     const sign = tx.type === 'income' ? '+' : '-';
+    const pay = PAYMENT_LABEL[tx.payment] || 'Cash';
     const time = tx.time ? ' (' + tx.time + ')' : '';
-    text += formatDate(tx.date) + time + ' | ' + cat + (tx.note ? ' - ' + tx.note : '') + ' | ' + sign + formatRM(tx.amount) + '\n';
+    text += formatDate(tx.date) + time + ' | ' + cat + ' [' + pay + ']' + (tx.note ? ' - ' + tx.note : '') + ' | ' + sign + formatRM(tx.amount) + '\n';
   });
   text += '\n_Dijana oleh ChiiTracker_';
 
@@ -643,6 +668,7 @@ window.deleteTx = deleteTx;
 window.startEdit = startEdit;
 window.toggleMonthDays = toggleMonthDays;
 window.shareMonth = shareMonth;
+window.shareDay = shareDay;
 </script>
 </body>
 </html>
