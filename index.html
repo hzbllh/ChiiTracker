@@ -44,7 +44,6 @@
 
   <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
 
-    <!-- Summary -->
     <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
         <p class="text-sm text-gray-500 dark:text-gray-400" id="labelBalance">Baki</p>
@@ -60,7 +59,6 @@
       </div>
     </section>
 
-    <!-- Form -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
       <h2 class="font-semibold text-lg mb-4" id="labelAddTx">Tambah Transaksi</h2>
       <form id="txForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -103,7 +101,6 @@
       </form>
     </section>
 
-    <!-- Charts -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
         <h2 class="font-semibold text-lg mb-4" id="labelPie">Perbelanjaan ikut Kategori</h2>
@@ -115,20 +112,18 @@
       </div>
     </section>
 
-    <!-- Transaction List -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-semibold text-lg" id="labelList">Senarai Transaksi</h2>
         <button id="clearAll" class="text-sm text-red-500 hover:text-red-600 font-medium">Padam Semua</button>
       </div>
       <div id="txList" class="space-y-3 max-h-[28rem] overflow-y-auto"></div>
-      <p id="emptyState" class="text-center text-gray-400 py-8 hidden">Belum ada transaksi.</p>
+      <p id="emptyState" class="text-center text-gray-400 py-8 hidden">Belum ada transaksi hari ini.</p>
     </section>
 
-    <!-- Sejarah Bulanan (Auto) -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
       <h2 class="font-semibold text-lg mb-1" id="labelHistory">Sejarah Bulanan</h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4" id="historyHelp">Auto disimpan. Klik bulan untuk lihat hari. Boleh kongsi bulan atau hari.</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4" id="historyHelp">Semua data tersimpan di sini. Klik bulan untuk lihat hari. Boleh kongsi bulan atau hari.</p>
       <div id="historyList" class="space-y-2 max-h-96 overflow-y-auto"></div>
       <p id="emptyHistory" class="text-center text-gray-400 py-4 text-sm hidden">Belum ada data.</p>
     </section>
@@ -150,12 +145,13 @@ const translations = {
     notePlaceholder: 'Contoh: Makan tengah hari',
     add: 'Tambah', update: 'Kemaskini', cancel: 'Batal',
     pie: 'Perbelanjaan ikut Kategori', bar: 'Trend Bulanan',
-    list: 'Senarai Transaksi', clearAll: 'Padam Semua', empty: 'Belum ada transaksi.',
-    allMonths: 'Semua Bulan', noData: 'Tiada data', footer: 'ChiiTracker • Data disimpan di browser anda',
+    list: 'Senarai Transaksi', clearAll: 'Padam Semua', empty: 'Belum ada transaksi hari ini.',
+    today: 'Hari Ini', allMonths: 'Semua Bulan', noData: 'Tiada data',
+    footer: 'ChiiTracker • Data disimpan di browser anda',
     optExpense: 'Perbelanjaan', optIncome: 'Pendapatan',
     optCash: 'Cash', optBanking: 'Banking', optQR: 'QR',
     deleteConfirm: 'Padam transaksi ini?', clearConfirm: 'Padam SEMUA transaksi?',
-    history: 'Sejarah Bulanan', historyHelp: 'Auto disimpan. Klik bulan untuk lihat hari. Boleh kongsi bulan atau hari.',
+    history: 'Sejarah Bulanan', historyHelp: 'Semua data tersimpan di sini. Klik bulan untuk lihat hari. Boleh kongsi bulan atau hari.',
     viewDays: 'Lihat Hari',
     categories: {
       expense: { makan: 'Makanan', transport: 'Pengangkutan', belanja: 'Belanja', bil: 'Bil & Utiliti', hiburan: 'Hiburan', kesihatan: 'Kesihatan', lain: 'Lain-lain' },
@@ -169,12 +165,13 @@ const translations = {
     notePlaceholder: 'Example: Lunch',
     add: 'Add', update: 'Update', cancel: 'Cancel',
     pie: 'Expenses by Category', bar: 'Monthly Trend',
-    list: 'Transaction List', clearAll: 'Clear All', empty: 'No transactions yet.',
-    allMonths: 'All Months', noData: 'No data', footer: 'ChiiTracker • Data is stored in your browser',
+    list: 'Transaction List', clearAll: 'Clear All', empty: 'No transactions today.',
+    today: 'Today', allMonths: 'All Months', noData: 'No data',
+    footer: 'ChiiTracker • Data is stored in your browser',
     optExpense: 'Expense', optIncome: 'Income',
     optCash: 'Cash', optBanking: 'Banking', optQR: 'QR',
     deleteConfirm: 'Delete this transaction?', clearConfirm: 'Delete ALL transactions?',
-    history: 'Monthly History', historyHelp: 'Auto saved. Click month to view days. Share month or day.',
+    history: 'Monthly History', historyHelp: 'All data is saved here. Click month to view days. Share month or day.',
     viewDays: 'View Days',
     categories: {
       expense: { makan: 'Food', transport: 'Transport', belanja: 'Shopping', bil: 'Bills & Utilities', hiburan: 'Entertainment', kesihatan: 'Health', lain: 'Others' },
@@ -282,6 +279,11 @@ function setDefaultDate() {
   document.getElementById('date').value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
 }
 
+function getTodayKey() {
+  const now = new Date();
+  return now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+}
+
 function updateCategoryOptions() {
   const type = document.getElementById('type').value;
   const select = document.getElementById('category');
@@ -364,17 +366,28 @@ function setupMonthFilter() {
   const months = getAvailableMonths();
   const t = translations[currentLang];
   select.innerHTML = '';
+
+  // Hari Ini (default)
+  const todayOpt = document.createElement('option');
+  todayOpt.value = 'today';
+  todayOpt.textContent = t.today;
+  select.appendChild(todayOpt);
+
+  // Semua Bulan
   const allOpt = document.createElement('option');
-  allOpt.value = 'all'; allOpt.textContent = t.allMonths;
+  allOpt.value = 'all';
+  allOpt.textContent = t.allMonths;
   select.appendChild(allOpt);
+
   months.forEach(m => {
     const opt = document.createElement('option');
-    opt.value = m.value; opt.textContent = m.label;
+    opt.value = m.value;
+    opt.textContent = m.label;
     select.appendChild(opt);
   });
-  const now = new Date();
-  const current = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
-  if (months.some(m => m.value === current)) select.value = current;
+
+  // Default = Hari Ini
+  select.value = 'today';
   select.onchange = render;
 }
 
@@ -392,9 +405,13 @@ function getAvailableMonths() {
 }
 
 function getFilteredTransactions() {
-  const month = document.getElementById('monthFilter').value;
-  if (month === 'all') return transactions;
-  return transactions.filter(tx => tx.date && tx.date.startsWith(month));
+  const filter = document.getElementById('monthFilter').value;
+  if (filter === 'today') {
+    const today = getTodayKey();
+    return transactions.filter(tx => tx.date === today);
+  }
+  if (filter === 'all') return transactions;
+  return transactions.filter(tx => tx.date && tx.date.startsWith(filter));
 }function render() {
   const filtered = getFilteredTransactions();
   updateSummary(filtered);
@@ -469,7 +486,6 @@ function setupClearAll() {
   });
 }
 
-// ---------- Sejarah Bulanan ----------
 function renderHistory() {
   const container = document.getElementById('historyList');
   const empty = document.getElementById('emptyHistory');
