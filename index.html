@@ -11,12 +11,7 @@
       darkMode: 'class',
       theme: {
         extend: {
-          colors: {
-            primary: { 500: '#10b981', 600: '#059669', 700: '#047857' }
-          },
-          fontFamily: {
-            logo: ['system-ui', 'Segoe UI', 'Roboto', 'sans-serif']
-          }
+          colors: { primary: { 500: '#10b981', 600: '#059669', 700: '#047857' } }
         }
       }
     }
@@ -24,26 +19,16 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     html { scroll-behavior: smooth; }
-    #txList::-webkit-scrollbar, #archiveList::-webkit-scrollbar { width: 6px; }
-    #txList::-webkit-scrollbar-track, #archiveList::-webkit-scrollbar-track { background: transparent; }
-    #txList::-webkit-scrollbar-thumb, #archiveList::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    .dark #txList::-webkit-scrollbar-thumb, .dark #archiveList::-webkit-scrollbar-thumb { background: #475569; }
-    #balance, #totalIncome, #totalExpense { transition: color 0.3s ease; }
+    #txList::-webkit-scrollbar { width: 6px; }
+    #txList::-webkit-scrollbar-track { background: transparent; }
+    #txList::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .dark #txList::-webkit-scrollbar-thumb { background: #475569; }
     .tx-item { transition: all 0.15s ease; }
     canvas { max-width: 100%; }
-    .logo-text {
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #facc15, #f59e0b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
 
-  <!-- Header -->
   <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-gray-200 dark:border-gray-700">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -54,18 +39,15 @@
         </h1>
       </div>
       <div class="flex items-center gap-2">
-        <select id="monthFilter" class="text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500"></select>
-        <button id="langToggle" class="px-2.5 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition">EN</button>
-        <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-          <span id="themeIcon">🌙</span>
-        </button>
+        <select id="monthFilter" class="text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-2 py-1.5"></select>
+        <button id="langToggle" class="px-2.5 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600">EN</button>
+        <button id="themeToggle" class="p-2 rounded-lg"><span id="themeIcon">🌙</span></button>
       </div>
     </div>
   </header>
 
   <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
 
-    <!-- Summary Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
         <p class="text-sm text-gray-500 dark:text-gray-400" id="labelBalance">Baki</p>
@@ -81,45 +63,40 @@
       </div>
     </section>
 
-    <!-- Add / Edit Form -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
       <h2 class="font-semibold text-lg mb-4" id="labelAddTx">Tambah Transaksi</h2>
       <form id="txForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         <input type="hidden" id="editId" value="">
         <div>
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelType">Jenis</label>
-          <select id="type" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+          <select id="type" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2">
             <option value="expense" id="optExpense">Perbelanjaan</option>
             <option value="income" id="optIncome">Pendapatan</option>
           </select>
         </div>
         <div>
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelAmount">Jumlah (RM)</label>
-          <input type="number" id="amount" step="0.01" min="0.01" required placeholder="0.00"
-            class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+          <input type="number" id="amount" step="0.01" min="0.01" required placeholder="0.00" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2" />
         </div>
         <div>
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelCategory">Kategori</label>
-          <select id="category" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"></select>
+          <select id="category" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2"></select>
         </div>
         <div>
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelDate">Tarikh</label>
-          <input type="date" id="date" required
-            class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+          <input type="date" id="date" required class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2" />
         </div>
         <div class="flex items-end gap-2">
-          <button type="submit" id="btnAdd" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-4 py-2.5 transition">Tambah</button>
+          <button type="submit" id="btnAdd" class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-4 py-2.5">Tambah</button>
           <button type="button" id="btnCancelEdit" class="hidden px-3 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm">Batal</button>
         </div>
         <div class="sm:col-span-2 lg:col-span-5">
           <label class="text-xs text-gray-500 dark:text-gray-400" id="labelNote">Nota (optional)</label>
-          <input type="text" id="note" placeholder=""
-            class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
+          <input type="text" id="note" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2" />
         </div>
       </form>
     </section>
 
-    <!-- Charts -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
         <h2 class="font-semibold text-lg mb-4" id="labelPie">Perbelanjaan ikut Kategori</h2>
@@ -131,69 +108,52 @@
       </div>
     </section>
 
-    <!-- Transaction List -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-      <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-lg" id="labelList">Senarai Transaksi</h2>
-        <button id="clearAll" class="text-sm text-red-500 hover:text-red-600 font-medium">Padam Semua</button>
+        <div class="flex gap-2">
+          <button id="btnShareWA" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg">WhatsApp</button>
+          <button id="btnShareTG" class="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg">Telegram</button>
+          <button id="clearAll" class="text-sm text-red-500 hover:text-red-600 font-medium">Padam Semua</button>
+        </div>
       </div>
       <div id="txList" class="space-y-3 max-h-[28rem] overflow-y-auto"></div>
-      <p id="emptyState" class="text-center text-gray-400 py-8 hidden">Belum ada transaksi. Tambah yang pertama!</p>
-    </section>
-
-    <!-- Monthly Archive Section -->
-    <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold text-lg" id="labelArchive">Simpan Bulanan</h2>
-        <button id="btnSaveMonth" class="text-sm bg-primary-600 hover:bg-primary-700 text-white px-3 py-1.5 rounded-lg font-medium">Simpan Bulan Ini</button>
-      </div>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-3" id="archiveHelp">Simpan data bulan semasa. Boleh buka balik kemudian untuk lihat hari demi hari.</p>
-      <div id="archiveList" class="space-y-2 max-h-64 overflow-y-auto"></div>
-      <p id="emptyArchive" class="text-center text-gray-400 py-4 text-sm">Belum ada data bulanan disimpan.</p>
+      <p id="emptyState" class="text-center text-gray-400 py-8 hidden">Belum ada transaksi.</p>
     </section>
 
   </main>
 
-  <footer class="text-center text-sm text-gray-400 py-6" id="footerText">
-    ChiiTracker • Data disimpan di browser anda
-  </footer>
+  <footer class="text-center text-sm text-gray-400 py-6" id="footerText">ChiiTracker • Data disimpan di browser anda</footer>
 
 <script>
 const STORAGE_KEY = 'chiiTracker_transactions';
-const ARCHIVE_KEY = 'chiiTracker_archives';
 const THEME_KEY = 'chiiTracker_theme';
 const LANG_KEY = 'chiiTracker_lang';
 
 const translations = {
   ms: {
-    appTitle: 'ChiiTracker', balance: 'Baki', income: 'Pendapatan', expense: 'Perbelanjaan',
+    balance: 'Baki', income: 'Pendapatan', expense: 'Perbelanjaan',
     addTx: 'Tambah Transaksi', editTx: 'Edit Transaksi', type: 'Jenis', amount: 'Jumlah (RM)',
     category: 'Kategori', date: 'Tarikh', note: 'Nota (optional)', notePlaceholder: 'Contoh: Makan tengah hari',
     add: 'Tambah', update: 'Kemaskini', cancel: 'Batal', pie: 'Perbelanjaan ikut Kategori', bar: 'Trend Bulanan',
     list: 'Senarai Transaksi', clearAll: 'Padam Semua', empty: 'Belum ada transaksi. Tambah yang pertama!',
     allMonths: 'Semua Bulan', noData: 'Tiada data', footer: 'ChiiTracker • Data disimpan di browser anda',
     optExpense: 'Perbelanjaan', optIncome: 'Pendapatan',
-    deleteConfirm: 'Padam transaksi ini?', clearConfirm: 'Padam SEMUA transaksi? Tindakan ini tidak boleh diundur.',
-    archive: 'Simpan Bulanan', saveMonth: 'Simpan Bulan Ini', archiveHelp: 'Simpan data bulan semasa. Boleh buka balik kemudian untuk lihat hari demi hari.',
-    emptyArchive: 'Belum ada data bulanan disimpan.', viewDay: 'Lihat Hari', close: 'Tutup',
-    saved: 'Bulan berjaya disimpan!', alreadySaved: 'Bulan ini sudah disimpan.',
+    deleteConfirm: 'Padam transaksi ini?', clearConfirm: 'Padam SEMUA transaksi?',
     categories: {
       expense: { makan: 'Makanan', transport: 'Pengangkutan', belanja: 'Belanja', bil: 'Bil & Utiliti', hiburan: 'Hiburan', kesihatan: 'Kesihatan', lain: 'Lain-lain' },
       income: { gaji: 'Gaji', freelance: 'Freelance', hadiah: 'Hadiah / Bonus', 'lain-income': 'Lain-lain' }
     }
   },
   en: {
-    appTitle: 'ChiiTracker', balance: 'Balance', income: 'Income', expense: 'Expense',
+    balance: 'Balance', income: 'Income', expense: 'Expense',
     addTx: 'Add Transaction', editTx: 'Edit Transaction', type: 'Type', amount: 'Amount (RM)',
     category: 'Category', date: 'Date', note: 'Note (optional)', notePlaceholder: 'Example: Lunch',
     add: 'Add', update: 'Update', cancel: 'Cancel', pie: 'Expenses by Category', bar: 'Monthly Trend',
-    list: 'Transaction List', clearAll: 'Clear All', empty: 'No transactions yet. Add your first one!',
+    list: 'Transaction List', clearAll: 'Clear All', empty: 'No transactions yet.',
     allMonths: 'All Months', noData: 'No data', footer: 'ChiiTracker • Data is stored in your browser',
     optExpense: 'Expense', optIncome: 'Income',
-    deleteConfirm: 'Delete this transaction?', clearConfirm: 'Delete ALL transactions? This cannot be undone.',
-    archive: 'Monthly Archive', saveMonth: 'Save This Month', archiveHelp: 'Save current month data. You can open it later to view day by day.',
-    emptyArchive: 'No monthly data saved yet.', viewDay: 'View Days', close: 'Close',
-    saved: 'Month saved successfully!', alreadySaved: 'This month is already saved.',
+    deleteConfirm: 'Delete this transaction?', clearConfirm: 'Delete ALL transactions?',
     categories: {
       expense: { makan: 'Food', transport: 'Transport', belanja: 'Shopping', bil: 'Bills & Utilities', hiburan: 'Entertainment', kesihatan: 'Health', lain: 'Others' },
       income: { gaji: 'Salary', freelance: 'Freelance', hadiah: 'Gift / Bonus', 'lain-income': 'Others' }
@@ -207,31 +167,17 @@ const CATEGORY_COLORS = {
 };
 
 let transactions = [];
-let archives = [];
 let pieChart = null;
 let barChart = null;
 let currentLang = 'ms';
 let editingId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadTheme();
-  loadLang();
-  loadTransactions();
-  loadArchives();
-  setupForm();
-  setupThemeToggle();
-  setupLangToggle();
-  setupMonthFilter();
-  setupClearAll();
-  setupArchive();
-  setDefaultDate();
-  updateCategoryOptions();
-  applyLanguage();
-  render();
-  renderArchives();
-});
-
-function loadLang() { currentLang = localStorage.getItem(LANG_KEY) || 'ms'; }
+  loadTheme(); loadLang(); loadTransactions();
+  setupForm(); setupThemeToggle(); setupLangToggle();
+  setupMonthFilter(); setupClearAll(); setupShare();
+  setDefaultDate(); updateCategoryOptions(); applyLanguage(); render();
+});function loadLang() { currentLang = localStorage.getItem(LANG_KEY) || 'ms'; }
 
 function applyLanguage() {
   const t = translations[currentLang];
@@ -256,14 +202,7 @@ function applyLanguage() {
   document.getElementById('optExpense').textContent = t.optExpense;
   document.getElementById('optIncome').textContent = t.optIncome;
   document.getElementById('langToggle').textContent = currentLang === 'ms' ? 'EN' : 'BM';
-  document.getElementById('labelArchive').textContent = t.archive;
-  document.getElementById('btnSaveMonth').textContent = t.saveMonth;
-  document.getElementById('archiveHelp').textContent = t.archiveHelp;
-  document.getElementById('emptyArchive').textContent = t.emptyArchive;
-  updateCategoryOptions();
-  setupMonthFilter();
-  render();
-  renderArchives();
+  updateCategoryOptions(); setupMonthFilter(); render();
 }
 
 function setupLangToggle() {
@@ -274,10 +213,7 @@ function setupLangToggle() {
   });
 }
 
-function loadTheme() {
-  const saved = localStorage.getItem(THEME_KEY) || 'light';
-  applyTheme(saved);
-}
+function loadTheme() { applyTheme(localStorage.getItem(THEME_KEY) || 'light'); }
 
 function applyTheme(theme) {
   const html = document.documentElement;
@@ -294,8 +230,7 @@ function applyTheme(theme) {
 
 function setupThemeToggle() {
   document.getElementById('themeToggle').addEventListener('click', () => {
-    const isDark = document.documentElement.classList.contains('dark');
-    applyTheme(isDark ? 'light' : 'dark');
+    applyTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
   });
 }
 
@@ -308,25 +243,13 @@ function saveTransactions() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
 }
 
-function loadArchives() {
-  const raw = localStorage.getItem(ARCHIVE_KEY);
-  archives = raw ? JSON.parse(raw) : [];
-}
-
-function saveArchives() {
-  localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archives));
-}
-
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 }
 
 function setDefaultDate() {
   const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  document.getElementById('date').value = year + '-' + month + '-' + day;
+  document.getElementById('date').value = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
 }
 
 function updateCategoryOptions() {
@@ -336,15 +259,13 @@ function updateCategoryOptions() {
   select.innerHTML = '';
   Object.keys(cats).forEach(id => {
     const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = cats[id];
+    opt.value = id; opt.textContent = cats[id];
     select.appendChild(opt);
   });
 }
 
 function setupForm() {
   document.getElementById('type').addEventListener('change', updateCategoryOptions);
-
   document.getElementById('txForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const type = document.getElementById('type').value;
@@ -353,34 +274,25 @@ function setupForm() {
     const date = document.getElementById('date').value;
     const note = document.getElementById('note').value.trim();
     const editId = document.getElementById('editId').value;
-
     if (!amount || amount <= 0) return;
 
     const now = new Date();
-    const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    const timeStr = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
 
     if (editId) {
       const idx = transactions.findIndex(tx => tx.id === editId);
-      if (idx !== -1) {
-        transactions[idx] = { ...transactions[idx], type, amount, category, date, note };
-      }
+      if (idx !== -1) transactions[idx] = { ...transactions[idx], type, amount, category, date, note };
       cancelEdit();
     } else {
       transactions.unshift({
-        id: generateId(),
-        type, amount, category, date, note,
-        time: timeStr,
-        createdAt: now.toISOString()
+        id: generateId(), type, amount, category, date, note,
+        time: timeStr, createdAt: now.toISOString()
       });
     }
-
     saveTransactions();
     document.getElementById('txForm').reset();
-    setDefaultDate();
-    updateCategoryOptions();
-    render();
+    setDefaultDate(); updateCategoryOptions(); render();
   });
-
   document.getElementById('btnCancelEdit').addEventListener('click', cancelEdit);
 }
 
@@ -406,8 +318,7 @@ function cancelEdit() {
   editingId = null;
   document.getElementById('editId').value = '';
   document.getElementById('txForm').reset();
-  setDefaultDate();
-  updateCategoryOptions();
+  setDefaultDate(); updateCategoryOptions();
   const t = translations[currentLang];
   document.getElementById('labelAddTx').textContent = t.addTx;
   document.getElementById('btnAdd').textContent = t.add;
@@ -420,33 +331,28 @@ function setupMonthFilter() {
   const t = translations[currentLang];
   select.innerHTML = '';
   const allOpt = document.createElement('option');
-  allOpt.value = 'all';
-  allOpt.textContent = t.allMonths;
+  allOpt.value = 'all'; allOpt.textContent = t.allMonths;
   select.appendChild(allOpt);
   months.forEach(m => {
     const opt = document.createElement('option');
-    opt.value = m.value;
-    opt.textContent = m.label;
+    opt.value = m.value; opt.textContent = m.label;
     select.appendChild(opt);
   });
   const now = new Date();
-  const current = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+  const current = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
   if (months.some(m => m.value === current)) select.value = current;
   select.onchange = render;
 }
 
 function getAvailableMonths() {
   const set = new Set();
-  transactions.forEach(tx => {
-    if (tx.date && tx.date.length >= 7) set.add(tx.date.slice(0, 7));
-  });
+  transactions.forEach(tx => { if (tx.date && tx.date.length >= 7) set.add(tx.date.slice(0,7)); });
   const now = new Date();
-  const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
-  set.add(currentMonth);
+  set.add(now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0'));
   const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
-  return Array.from(set).sort((a, b) => b.localeCompare(a)).map(v => {
+  return Array.from(set).sort((a,b) => b.localeCompare(a)).map(v => {
     const parts = v.split('-');
-    const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, 1);
+    const date = new Date(parseInt(parts[0]), parseInt(parts[1])-1, 1);
     return { value: v, label: date.toLocaleDateString(locale, { month: 'long', year: 'numeric' }) };
   });
 }
@@ -455,9 +361,7 @@ function getFilteredTransactions() {
   const month = document.getElementById('monthFilter').value;
   if (month === 'all') return transactions;
   return transactions.filter(tx => tx.date && tx.date.startsWith(month));
-}
-
-function render() {
+}function render() {
   const filtered = getFilteredTransactions();
   updateSummary(filtered);
   renderList(filtered);
@@ -466,10 +370,7 @@ function render() {
 
 function updateSummary(list) {
   let income = 0, expense = 0;
-  list.forEach(tx => {
-    if (tx.type === 'income') income += tx.amount;
-    else expense += tx.amount;
-  });
+  list.forEach(tx => { if (tx.type === 'income') income += tx.amount; else expense += tx.amount; });
   const balance = income - expense;
   document.getElementById('balance').textContent = formatRM(balance);
   document.getElementById('totalIncome').textContent = formatRM(income);
@@ -484,11 +385,7 @@ function updateSummary(list) {
 function renderList(list) {
   const container = document.getElementById('txList');
   const empty = document.getElementById('emptyState');
-  if (list.length === 0) {
-    container.innerHTML = '';
-    empty.classList.remove('hidden');
-    return;
-  }
+  if (list.length === 0) { container.innerHTML = ''; empty.classList.remove('hidden'); return; }
   empty.classList.add('hidden');
   let html = '';
   list.forEach(tx => {
@@ -504,27 +401,25 @@ function renderList(list) {
     html += '<div class="flex items-start gap-3">';
     html += '<div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-bold" style="background:' + color + '">' + catName.charAt(0) + '</div>';
     html += '<div class="flex-1 min-w-0">';
-    html += '<div class="flex items-center justify-between gap-2">';
-    html += '<p class="font-semibold text-base">' + catName + '</p>';
-    html += '<p class="font-bold ' + amountClass + ' whitespace-nowrap">' + sign + ' ' + formatRM(tx.amount) + '</p>';
-    html += '</div>';
+    html += '<div class="flex items-center justify-between gap-2"><p class="font-semibold">' + catName + '</p>';
+    html += '<p class="font-bold ' + amountClass + '">' + sign + ' ' + formatRM(tx.amount) + '</p></div>';
     html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">' + formatDate(tx.date) + timeHtml + '</p>';
-    html += noteHtml;
-    html += '</div></div>';
+    html += noteHtml + '</div></div>';
     html += '<div class="flex justify-end gap-3 mt-3 pt-2 border-t border-gray-200 dark:border-gray-600">';
-    html += '<button onclick="startEdit(\'' + tx.id + '\')" class="text-sm text-blue-500 hover:text-blue-600 font-medium">✏️ Edit</button>';
-    html += '<button onclick="deleteTx(\'' + tx.id + '\')" class="text-sm text-red-500 hover:text-red-600 font-medium">🗑️ Padam</button>';
+    html += '<button onclick="startEdit(\'' + tx.id + '\')" class="text-sm text-blue-500">✏️ Edit</button>';
+    html += '<button onclick="deleteTx(\'' + tx.id + '\')" class="text-sm text-red-500">🗑️ Padam</button>';
     html += '</div></div>';
   });
   container.innerHTML = html;
-}function getCategoryName(type, id) {
+}
+
+function getCategoryName(type, id) {
   const cats = translations[currentLang].categories[type];
   return (cats && cats[id]) ? cats[id] : id;
 }
 
 function deleteTx(id) {
-  const t = translations[currentLang];
-  if (!confirm(t.deleteConfirm)) return;
+  if (!confirm(translations[currentLang].deleteConfirm)) return;
   transactions = transactions.filter(tx => tx.id !== id);
   saveTransactions();
   if (editingId === id) cancelEdit();
@@ -533,134 +428,46 @@ function deleteTx(id) {
 
 function setupClearAll() {
   document.getElementById('clearAll').addEventListener('click', () => {
-    const t = translations[currentLang];
-    if (!confirm(t.clearConfirm)) return;
-    transactions = [];
-    saveTransactions();
-    cancelEdit();
-    render();
+    if (!confirm(translations[currentLang].clearConfirm)) return;
+    transactions = []; saveTransactions(); cancelEdit(); render();
   });
 }
 
-// ---------- Monthly Archive ----------
-function setupArchive() {
-  document.getElementById('btnSaveMonth').addEventListener('click', saveCurrentMonth);
+// ---------- Share to WhatsApp / Telegram ----------
+function setupShare() {
+  document.getElementById('btnShareWA').addEventListener('click', () => shareData('wa'));
+  document.getElementById('btnShareTG').addEventListener('click', () => shareData('tg'));
 }
 
-function saveCurrentMonth() {
-  const t = translations[currentLang];
-  const now = new Date();
-  const monthKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
-  const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
-  const monthLabel = now.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
-
-  // Check if already saved
-  if (archives.some(a => a.monthKey === monthKey)) {
-    alert(t.alreadySaved);
-    return;
-  }
-
-  // Get this month transactions
-  const monthTx = transactions.filter(tx => tx.date && tx.date.startsWith(monthKey));
-  
+function shareData(platform) {
+  const filtered = getFilteredTransactions();
+  const monthLabel = document.getElementById('monthFilter').selectedOptions[0].text;
   let income = 0, expense = 0;
-  monthTx.forEach(tx => {
-    if (tx.type === 'income') income += tx.amount;
-    else expense += tx.amount;
+  filtered.forEach(tx => { if (tx.type === 'income') income += tx.amount; else expense += tx.amount; });
+
+  let text = '💰 *ChiiTracker* - ' + monthLabel + '\n\n';
+  text += '📈 Pendapatan: ' + formatRM(income) + '\n';
+  text += '📉 Perbelanjaan: ' + formatRM(expense) + '\n';
+  text += '💵 Baki: ' + formatRM(income - expense) + '\n\n';
+  text += '--- Senarai ---\n';
+
+  filtered.forEach(tx => {
+    const cat = getCategoryName(tx.type, tx.category);
+    const sign = tx.type === 'income' ? '+' : '-';
+    const time = tx.time ? ' (' + tx.time + ')' : '';
+    text += formatDate(tx.date) + time + ' | ' + cat + (tx.note ? ' - ' + tx.note : '') + ' | ' + sign + formatRM(tx.amount) + '\n';
   });
 
-  archives.unshift({
-    id: generateId(),
-    monthKey: monthKey,
-    label: monthLabel,
-    transactions: JSON.parse(JSON.stringify(monthTx)),
-    income: income,
-    expense: expense,
-    balance: income - expense,
-    savedAt: new Date().toISOString()
-  });
+  text += '\n_Dijana oleh ChiiTracker_';
 
-  saveArchives();
-  renderArchives();
-  alert(t.saved);
+  const encoded = encodeURIComponent(text);
+  if (platform === 'wa') {
+    window.open('https://wa.me/?text=' + encoded, '_blank');
+  } else {
+    window.open('https://t.me/share/url?url=&text=' + encoded, '_blank');
+  }
 }
 
-function renderArchives() {
-  const container = document.getElementById('archiveList');
-  const empty = document.getElementById('emptyArchive');
-  const t = translations[currentLang];
-
-  if (archives.length === 0) {
-    container.innerHTML = '';
-    empty.classList.remove('hidden');
-    return;
-  }
-  empty.classList.add('hidden');
-
-  let html = '';
-  archives.forEach(arch => {
-    html += '<div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">';
-    html += '<div class="flex items-center justify-between">';
-    html += '<div>';
-    html += '<p class="font-semibold">' + arch.label + '</p>';
-    html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">';
-    html += t.income + ': ' + formatRM(arch.income) + ' | ' + t.expense + ': ' + formatRM(arch.expense);
-    html += '</p></div>';
-    html += '<button onclick="viewArchive(\'' + arch.id + '\')" class="text-sm text-primary-600 hover:text-primary-700 font-medium">' + t.viewDay + '</button>';
-    html += '</div>';
-    html += '<div id="archDetail-' + arch.id + '" class="hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2"></div>';
-    html += '</div>';
-  });
-  container.innerHTML = html;
-}
-
-function viewArchive(id) {
-  const arch = archives.find(a => a.id === id);
-  if (!arch) return;
-  const detail = document.getElementById('archDetail-' + id);
-  const t = translations[currentLang];
-
-  if (!detail.classList.contains('hidden')) {
-    detail.classList.add('hidden');
-    return;
-  }
-
-  // Group by day
-  const byDay = {};
-  arch.transactions.forEach(tx => {
-    if (!byDay[tx.date]) byDay[tx.date] = [];
-    byDay[tx.date].push(tx);
-  });
-
-  const days = Object.keys(byDay).sort((a, b) => b.localeCompare(a));
-  let html = '';
-
-  days.forEach(day => {
-    html += '<div class="mb-2">';
-    html += '<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">' + formatDate(day) + '</p>';
-    byDay[day].forEach(tx => {
-      const catName = getCategoryName(tx.type, tx.category);
-      const isIncome = tx.type === 'income';
-      const amountClass = isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
-      const sign = isIncome ? '+' : '-';
-      const timeStr = tx.time ? ' • ' + tx.time : '';
-      html += '<div class="flex justify-between text-sm py-1">';
-      html += '<span>' + catName + (tx.note ? ' • ' + tx.note : '') + timeStr + '</span>';
-      html += '<span class="font-medium ' + amountClass + '">' + sign + ' ' + formatRM(tx.amount) + '</span>';
-      html += '</div>';
-    });
-    html += '</div>';
-  });
-
-  if (days.length === 0) {
-    html = '<p class="text-sm text-gray-400">' + t.noData + '</p>';
-  }
-
-  detail.innerHTML = html;
-  detail.classList.remove('hidden');
-}
-
-// ---------- Charts ----------
 function updateCharts() {
   const filtered = getFilteredTransactions();
   updatePieChart(filtered);
@@ -683,21 +490,13 @@ function updatePieChart(list) {
     }
     return '#6b7280';
   });
-
   const ctx = document.getElementById('pieChart').getContext('2d');
   const isDark = document.documentElement.classList.contains('dark');
   if (pieChart) pieChart.destroy();
-
   pieChart = new Chart(ctx, {
     type: 'doughnut',
-    data: {
-      labels: labels.length ? labels : [t.noData],
-      datasets: [{ data: data.length ? data : [1], backgroundColor: data.length ? colors : ['#e5e7eb'], borderWidth: 0 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { color: isDark ? '#e5e7eb' : '#374151', padding: 12, font: { size: 12 } } } }
-    }
+    data: { labels: labels.length ? labels : [t.noData], datasets: [{ data: data.length ? data : [1], backgroundColor: data.length ? colors : ['#e5e7eb'], borderWidth: 0 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: isDark ? '#e5e7eb' : '#374151', padding: 12 } } } }
   });
 }
 
@@ -708,43 +507,31 @@ function updateBarChart() {
   const now = new Date();
   for (let i = 5; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-    months.push({ key: key, label: d.toLocaleDateString(locale, { month: 'short' }) });
+    months.push({ key: d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'), label: d.toLocaleDateString(locale, { month: 'short' }) });
   }
-
   const incomeData = [], expenseData = [];
   months.forEach(m => {
     let inc = 0, exp = 0;
     transactions.forEach(tx => {
       if (tx.date && tx.date.startsWith(m.key)) {
-        if (tx.type === 'income') inc += tx.amount;
-        else exp += tx.amount;
+        if (tx.type === 'income') inc += tx.amount; else exp += tx.amount;
       }
     });
-    incomeData.push(inc);
-    expenseData.push(exp);
+    incomeData.push(inc); expenseData.push(exp);
   });
-
   const ctx = document.getElementById('barChart').getContext('2d');
   const isDark = document.documentElement.classList.contains('dark');
   if (barChart) barChart.destroy();
-
   barChart = new Chart(ctx, {
     type: 'bar',
-    data: {
-      labels: months.map(m => m.label),
-      datasets: [
-        { label: t.income, data: incomeData, backgroundColor: '#22c55e', borderRadius: 6 },
-        { label: t.expense, data: expenseData, backgroundColor: '#ef4444', borderRadius: 6 }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      scales: {
-        x: { ticks: { color: isDark ? '#9ca3af' : '#6b7280' }, grid: { display: false } },
-        y: { ticks: { color: isDark ? '#9ca3af' : '#6b7280' }, grid: { color: isDark ? '#374151' : '#e5e7eb' } }
-      },
-      plugins: { legend: { position: 'bottom', labels: { color: isDark ? '#e5e7eb' : '#374151', padding: 12 } } }
+    data: { labels: months.map(m => m.label), datasets: [
+      { label: t.income, data: incomeData, backgroundColor: '#22c55e', borderRadius: 6 },
+      { label: t.expense, data: expenseData, backgroundColor: '#ef4444', borderRadius: 6 }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: { x: { ticks: { color: isDark ? '#9ca3af' : '#6b7280' }, grid: { display: false } },
+                y: { ticks: { color: isDark ? '#9ca3af' : '#6b7280' }, grid: { color: isDark ? '#374151' : '#e5e7eb' } } },
+      plugins: { legend: { position: 'bottom', labels: { color: isDark ? '#e5e7eb' : '#374151' } } }
     }
   });
 }
@@ -762,7 +549,6 @@ function formatDate(dateStr) {
 
 window.deleteTx = deleteTx;
 window.startEdit = startEdit;
-window.viewArchive = viewArchive;
 </script>
 </body>
 </html>
