@@ -37,12 +37,15 @@
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="text-2xl">💰</span>
-        <h1 class="text-xl font-bold">Money Tracker</h1>
+        <h1 class="text-xl font-bold" id="appTitle">Money Tracker</h1>
       </div>
-      <div class="flex items-center gap-3">
-        <select id="monthFilter" class="text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500">
+      <div class="flex items-center gap-2">
+        <select id="monthFilter" class="text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500">
         </select>
-        <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Tukar tema">
+        <button id="langToggle" class="px-2.5 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Language">
+          EN
+        </button>
+        <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Theme">
           <span id="themeIcon">🌙</span>
         </button>
       </div>
@@ -54,53 +57,53 @@
     <!-- Summary Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Baki</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400" id="labelBalance">Baki</p>
         <p id="balance" class="text-2xl font-bold text-primary-600 dark:text-primary-500 mt-1">RM 0.00</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Pendapatan</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400" id="labelIncome">Pendapatan</p>
         <p id="totalIncome" class="text-2xl font-bold text-green-600 dark:text-green-400 mt-1">RM 0.00</p>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Perbelanjaan</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400" id="labelExpense">Perbelanjaan</p>
         <p id="totalExpense" class="text-2xl font-bold text-red-500 dark:text-red-400 mt-1">RM 0.00</p>
       </div>
     </section>
 
     <!-- Add Transaction Form -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-      <h2 class="font-semibold text-lg mb-4">Tambah Transaksi</h2>
+      <h2 class="font-semibold text-lg mb-4" id="labelAddTx">Tambah Transaksi</h2>
       <form id="txForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         <div>
-          <label class="text-xs text-gray-500 dark:text-gray-400">Jenis</label>
+          <label class="text-xs text-gray-500 dark:text-gray-400" id="labelType">Jenis</label>
           <select id="type" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
-            <option value="expense">Perbelanjaan</option>
-            <option value="income">Pendapatan</option>
+            <option value="expense" id="optExpense">Perbelanjaan</option>
+            <option value="income" id="optIncome">Pendapatan</option>
           </select>
         </div>
         <div>
-          <label class="text-xs text-gray-500 dark:text-gray-400">Jumlah (RM)</label>
+          <label class="text-xs text-gray-500 dark:text-gray-400" id="labelAmount">Jumlah (RM)</label>
           <input type="number" id="amount" step="0.01" min="0.01" required placeholder="0.00"
             class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
         </div>
         <div>
-          <label class="text-xs text-gray-500 dark:text-gray-400">Kategori</label>
+          <label class="text-xs text-gray-500 dark:text-gray-400" id="labelCategory">Kategori</label>
           <select id="category" class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
           </select>
         </div>
         <div>
-          <label class="text-xs text-gray-500 dark:text-gray-400">Tarikh</label>
+          <label class="text-xs text-gray-500 dark:text-gray-400" id="labelDate">Tarikh</label>
           <input type="date" id="date" required
             class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
         </div>
         <div class="flex items-end">
-          <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-4 py-2.5 transition">
+          <button type="submit" id="btnAdd" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-4 py-2.5 transition">
             Tambah
           </button>
         </div>
         <div class="sm:col-span-2 lg:col-span-5">
-          <label class="text-xs text-gray-500 dark:text-gray-400">Nota (optional)</label>
-          <input type="text" id="note" placeholder="Contoh: Makan tengah hari"
+          <label class="text-xs text-gray-500 dark:text-gray-400" id="labelNote">Nota (optional)</label>
+          <input type="text" id="note" placeholder=""
             class="w-full mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500" />
         </div>
       </form>
@@ -109,13 +112,13 @@
     <!-- Charts -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h2 class="font-semibold text-lg mb-4">Perbelanjaan ikut Kategori</h2>
+        <h2 class="font-semibold text-lg mb-4" id="labelPie">Perbelanjaan ikut Kategori</h2>
         <div class="relative h-64">
           <canvas id="pieChart"></canvas>
         </div>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-        <h2 class="font-semibold text-lg mb-4">Trend Bulanan</h2>
+        <h2 class="font-semibold text-lg mb-4" id="labelBar">Trend Bulanan</h2>
         <div class="relative h-64">
           <canvas id="barChart"></canvas>
         </div>
@@ -125,7 +128,7 @@
     <!-- Transaction List -->
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold text-lg">Senarai Transaksi</h2>
+        <h2 class="font-semibold text-lg" id="labelList">Senarai Transaksi</h2>
         <button id="clearAll" class="text-sm text-red-500 hover:text-red-600 font-medium">Padam Semua</button>
       </div>
       <div id="txList" class="space-y-2 max-h-96 overflow-y-auto"></div>
@@ -134,51 +137,189 @@
 
   </main>
 
-  <footer class="text-center text-sm text-gray-400 py-6">
+  <footer class="text-center text-sm text-gray-400 py-6" id="footerText">
     Money Tracker • Data disimpan di browser anda (localStorage)
   </footer>
 
 <script>
 // ======================
-// Money Tracker App (Single File)
+// Money Tracker - Full Version
+// BM / English + Dark/Light + Fixed bugs
 // ======================
 
 const STORAGE_KEY = 'moneyTracker_transactions';
 const THEME_KEY = 'moneyTracker_theme';
+const LANG_KEY = 'moneyTracker_lang';
 
-const CATEGORIES = {
-  expense: [
-    { id: 'makan', name: 'Makanan', color: '#f97316' },
-    { id: 'transport', name: 'Pengangkutan', color: '#3b82f6' },
-    { id: 'belanja', name: 'Belanja', color: '#ec4899' },
-    { id: 'bil', name: 'Bil & Utiliti', color: '#8b5cf6' },
-    { id: 'hiburan', name: 'Hiburan', color: '#14b8a6' },
-    { id: 'kesihatan', name: 'Kesihatan', color: '#ef4444' },
-    { id: 'lain', name: 'Lain-lain', color: '#6b7280' }
-  ],
-  income: [
-    { id: 'gaji', name: 'Gaji', color: '#22c55e' },
-    { id: 'freelance', name: 'Freelance', color: '#84cc16' },
-    { id: 'hadiah', name: 'Hadiah / Bonus', color: '#eab308' },
-    { id: 'lain-income', name: 'Lain-lain', color: '#10b981' }
-  ]
+const translations = {
+  ms: {
+    appTitle: 'Money Tracker',
+    balance: 'Baki',
+    income: 'Pendapatan',
+    expense: 'Perbelanjaan',
+    addTx: 'Tambah Transaksi',
+    type: 'Jenis',
+    amount: 'Jumlah (RM)',
+    category: 'Kategori',
+    date: 'Tarikh',
+    note: 'Nota (optional)',
+    notePlaceholder: 'Contoh: Makan tengah hari',
+    add: 'Tambah',
+    pie: 'Perbelanjaan ikut Kategori',
+    bar: 'Trend Bulanan',
+    list: 'Senarai Transaksi',
+    clearAll: 'Padam Semua',
+    empty: 'Belum ada transaksi. Tambah yang pertama!',
+    allMonths: 'Semua Bulan',
+    noData: 'Tiada data',
+    footer: 'Money Tracker • Data disimpan di browser anda (localStorage)',
+    optExpense: 'Perbelanjaan',
+    optIncome: 'Pendapatan',
+    deleteConfirm: 'Padam transaksi ini?',
+    clearConfirm: 'Padam SEMUA transaksi? Tindakan ini tidak boleh diundur.',
+    categories: {
+      expense: {
+        makan: 'Makanan',
+        transport: 'Pengangkutan',
+        belanja: 'Belanja',
+        bil: 'Bil & Utiliti',
+        hiburan: 'Hiburan',
+        kesihatan: 'Kesihatan',
+        lain: 'Lain-lain'
+      },
+      income: {
+        gaji: 'Gaji',
+        freelance: 'Freelance',
+        hadiah: 'Hadiah / Bonus',
+        'lain-income': 'Lain-lain'
+      }
+    }
+  },
+  en: {
+    appTitle: 'Money Tracker',
+    balance: 'Balance',
+    income: 'Income',
+    expense: 'Expense',
+    addTx: 'Add Transaction',
+    type: 'Type',
+    amount: 'Amount (RM)',
+    category: 'Category',
+    date: 'Date',
+    note: 'Note (optional)',
+    notePlaceholder: 'Example: Lunch',
+    add: 'Add',
+    pie: 'Expenses by Category',
+    bar: 'Monthly Trend',
+    list: 'Transaction List',
+    clearAll: 'Clear All',
+    empty: 'No transactions yet. Add your first one!',
+    allMonths: 'All Months',
+    noData: 'No data',
+    footer: 'Money Tracker • Data is stored in your browser (localStorage)',
+    optExpense: 'Expense',
+    optIncome: 'Income',
+    deleteConfirm: 'Delete this transaction?',
+    clearConfirm: 'Delete ALL transactions? This cannot be undone.',
+    categories: {
+      expense: {
+        makan: 'Food',
+        transport: 'Transport',
+        belanja: 'Shopping',
+        bil: 'Bills & Utilities',
+        hiburan: 'Entertainment',
+        kesihatan: 'Health',
+        lain: 'Others'
+      },
+      income: {
+        gaji: 'Salary',
+        freelance: 'Freelance',
+        hadiah: 'Gift / Bonus',
+        'lain-income': 'Others'
+      }
+    }
+  }
+};
+
+const CATEGORY_COLORS = {
+  expense: {
+    makan: '#f97316',
+    transport: '#3b82f6',
+    belanja: '#ec4899',
+    bil: '#8b5cf6',
+    hiburan: '#14b8a6',
+    kesihatan: '#ef4444',
+    lain: '#6b7280'
+  },
+  income: {
+    gaji: '#22c55e',
+    freelance: '#84cc16',
+    hadiah: '#eab308',
+    'lain-income': '#10b981'
+  }
 };
 
 let transactions = [];
 let pieChart = null;
 let barChart = null;
+let currentLang = 'ms';
 
 document.addEventListener('DOMContentLoaded', () => {
   loadTheme();
+  loadLang();
   loadTransactions();
   setupForm();
   setupThemeToggle();
+  setupLangToggle();
   setupMonthFilter();
   setupClearAll();
   setDefaultDate();
   updateCategoryOptions();
+  applyLanguage();
   render();
 });
+
+// ---------- Language ----------
+function loadLang() {
+  currentLang = localStorage.getItem(LANG_KEY) || 'ms';
+}
+
+function applyLanguage() {
+  const t = translations[currentLang];
+
+  document.getElementById('appTitle').textContent = t.appTitle;
+  document.getElementById('labelBalance').textContent = t.balance;
+  document.getElementById('labelIncome').textContent = t.income;
+  document.getElementById('labelExpense').textContent = t.expense;
+  document.getElementById('labelAddTx').textContent = t.addTx;
+  document.getElementById('labelType').textContent = t.type;
+  document.getElementById('labelAmount').textContent = t.amount;
+  document.getElementById('labelCategory').textContent = t.category;
+  document.getElementById('labelDate').textContent = t.date;
+  document.getElementById('labelNote').textContent = t.note;
+  document.getElementById('note').placeholder = t.notePlaceholder;
+  document.getElementById('btnAdd').textContent = t.add;
+  document.getElementById('labelPie').textContent = t.pie;
+  document.getElementById('labelBar').textContent = t.bar;
+  document.getElementById('labelList').textContent = t.list;
+  document.getElementById('clearAll').textContent = t.clearAll;
+  document.getElementById('emptyState').textContent = t.empty;
+  document.getElementById('footerText').textContent = t.footer;
+  document.getElementById('optExpense').textContent = t.optExpense;
+  document.getElementById('optIncome').textContent = t.optIncome;
+  document.getElementById('langToggle').textContent = currentLang === 'ms' ? 'EN' : 'BM';
+
+  updateCategoryOptions();
+  setupMonthFilter();
+  render();
+}
+
+function setupLangToggle() {
+  document.getElementById('langToggle').addEventListener('click', () => {
+    currentLang = currentLang === 'ms' ? 'en' : 'ms';
+    localStorage.setItem(LANG_KEY, currentLang);
+    applyLanguage();
+  });
+}
 
 // ---------- Theme ----------
 function loadTheme() {
@@ -232,11 +373,12 @@ function setDefaultDate() {
 function updateCategoryOptions() {
   const type = document.getElementById('type').value;
   const select = document.getElementById('category');
+  const cats = translations[currentLang].categories[type];
   select.innerHTML = '';
-  CATEGORIES[type].forEach(cat => {
+  Object.keys(cats).forEach(id => {
     const opt = document.createElement('option');
-    opt.value = cat.id;
-    opt.textContent = cat.name;
+    opt.value = id;
+    opt.textContent = cats[id];
     select.appendChild(opt);
   });
 }
@@ -256,11 +398,11 @@ function setupForm() {
 
     const tx = {
       id: generateId(),
-      type,
-      amount,
-      category,
-      date,
-      note,
+      type: type,
+      amount: amount,
+      category: category,
+      date: date,
+      note: note,
       createdAt: new Date().toISOString()
     };
 
@@ -277,8 +419,14 @@ function setupForm() {
 function setupMonthFilter() {
   const select = document.getElementById('monthFilter');
   const months = getAvailableMonths();
+  const t = translations[currentLang];
 
-  select.innerHTML = '<option value="all">Semua Bulan</option>';
+  select.innerHTML = '';
+  const allOpt = document.createElement('option');
+  allOpt.value = 'all';
+  allOpt.textContent = t.allMonths;
+  select.appendChild(allOpt);
+
   months.forEach(m => {
     const opt = document.createElement('option');
     opt.value = m.value;
@@ -292,22 +440,22 @@ function setupMonthFilter() {
     select.value = current;
   }
 
-  select.addEventListener('change', render);
+  select.onchange = render;
 }
 
 function getAvailableMonths() {
   const set = new Set();
-
   transactions.forEach(tx => {
     if (tx.date && tx.date.length >= 7) {
       set.add(tx.date.slice(0, 7));
     }
   });
 
-  // Auto detect bulan semasa
   const now = new Date();
   const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
   set.add(currentMonth);
+
+  const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
 
   return Array.from(set)
     .sort((a, b) => b.localeCompare(a))
@@ -316,7 +464,7 @@ function getAvailableMonths() {
       const year = parseInt(parts[0]);
       const month = parseInt(parts[1]) - 1;
       const date = new Date(year, month, 1);
-      const label = date.toLocaleDateString('ms-MY', { month: 'long', year: 'numeric' });
+      const label = date.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
       return { value: v, label: label };
     });
 }
@@ -333,10 +481,6 @@ function render() {
   updateSummary(filtered);
   renderList(filtered);
   updateCharts();
-
-  const currentVal = document.getElementById('monthFilter').value;
-  setupMonthFilter();
-  document.getElementById('monthFilter').value = currentVal;
 }
 
 function updateSummary(list) {
@@ -361,6 +505,7 @@ function updateSummary(list) {
 function renderList(list) {
   const container = document.getElementById('txList');
   const empty = document.getElementById('emptyState');
+  const t = translations[currentLang];
 
   if (list.length === 0) {
     container.innerHTML = '';
@@ -369,40 +514,41 @@ function renderList(list) {
   }
   empty.classList.add('hidden');
 
-  container.innerHTML = list.map(tx => {
-    const cat = findCategory(tx.type, tx.category);
+  let html = '';
+  list.forEach(tx => {
+    const catName = getCategoryName(tx.type, tx.category);
+    const color = CATEGORY_COLORS[tx.type][tx.category] || '#6b7280';
     const isIncome = tx.type === 'income';
-    return `
-      <div class="tx-item flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium" style="background:${cat.color}">
-            ${cat.name.charAt(0)}
-          </div>
-          <div class="min-w-0">
-            <p class="font-medium truncate">\( {cat.name} \){tx.note ? ' • ' + tx.note : ''}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">${formatDate(tx.date)}</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <span class="font-semibold ${isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}">
-            ${isIncome ? '+' : '-'} ${formatRM(tx.amount)}
-          </span>
-          <button onclick="deleteTx('${tx.id}')" class="text-gray-400 hover:text-red-500 transition p-1" title="Padam">
-            🗑️
-          </button>
-        </div>
-      </div>
-    `;
-  }).join('');
+    const noteText = tx.note ? ' • ' + tx.note : '';
+    const amountClass = isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+    const sign = isIncome ? '+' : '-';
+
+    html += '<div class="tx-item flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700">';
+    html += '<div class="flex items-center gap-3 min-w-0">';
+    html += '<div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-medium" style="background:' + color + '">';
+    html += catName.charAt(0);
+    html += '</div>';
+    html += '<div class="min-w-0">';
+    html += '<p class="font-medium truncate">' + catName + noteText + '</p>';
+    html += '<p class="text-xs text-gray-500 dark:text-gray-400">' + formatDate(tx.date) + '</p>';
+    html += '</div></div>';
+    html += '<div class="flex items-center gap-3">';
+    html += '<span class="font-semibold ' + amountClass + '">' + sign + ' ' + formatRM(tx.amount) + '</span>';
+    html += '<button onclick="deleteTx(\'' + tx.id + '\')" class="text-gray-400 hover:text-red-500 transition p-1" title="Delete">🗑️</button>';
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
 }
 
-function findCategory(type, id) {
-  const list = CATEGORIES[type] || [];
-  return list.find(c => c.id === id) || { name: id, color: '#6b7280' };
+function getCategoryName(type, id) {
+  const cats = translations[currentLang].categories[type];
+  return (cats && cats[id]) ? cats[id] : id;
 }
 
 function deleteTx(id) {
-  if (!confirm('Padam transaksi ini?')) return;
+  const t = translations[currentLang];
+  if (!confirm(t.deleteConfirm)) return;
   transactions = transactions.filter(tx => tx.id !== id);
   saveTransactions();
   render();
@@ -410,7 +556,8 @@ function deleteTx(id) {
 
 function setupClearAll() {
   document.getElementById('clearAll').addEventListener('click', () => {
-    if (!confirm('Padam SEMUA transaksi? Tindakan ini tidak boleh diundur.')) return;
+    const t = translations[currentLang];
+    if (!confirm(t.clearConfirm)) return;
     transactions = [];
     saveTransactions();
     render();
@@ -425,18 +572,22 @@ function updateCharts() {
 }
 
 function updatePieChart(list) {
+  const t = translations[currentLang];
   const expenses = list.filter(tx => tx.type === 'expense');
   const dataMap = {};
+
   expenses.forEach(tx => {
-    const cat = findCategory('expense', tx.category);
-    dataMap[cat.name] = (dataMap[cat.name] || 0) + tx.amount;
+    const name = getCategoryName('expense', tx.category);
+    dataMap[name] = (dataMap[name] || 0) + tx.amount;
   });
 
   const labels = Object.keys(dataMap);
   const data = Object.values(dataMap);
   const colors = labels.map(name => {
-    const cat = CATEGORIES.expense.find(c => c.name === name);
-    return cat ? cat.color : '#6b7280';
+    for (const id in CATEGORY_COLORS.expense) {
+      if (getCategoryName('expense', id) === name) return CATEGORY_COLORS.expense[id];
+    }
+    return '#6b7280';
   });
 
   const ctx = document.getElementById('pieChart').getContext('2d');
@@ -447,7 +598,7 @@ function updatePieChart(list) {
   pieChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: labels.length ? labels : ['Tiada data'],
+      labels: labels.length ? labels : [t.noData],
       datasets: [{
         data: data.length ? data : [1],
         backgroundColor: data.length ? colors : ['#e5e7eb'],
@@ -472,13 +623,16 @@ function updatePieChart(list) {
 }
 
 function updateBarChart() {
+  const t = translations[currentLang];
+  const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
   const months = [];
   const now = new Date();
+
   for (let i = 5; i >= 0; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
     const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-    const label = d.toLocaleDateString('ms-MY', { month: 'short' });
-    months.push({ key, label });
+    const label = d.toLocaleDateString(locale, { month: 'short' });
+    months.push({ key: key, label: label });
   }
 
   const incomeData = [];
@@ -507,13 +661,13 @@ function updateBarChart() {
       labels: months.map(m => m.label),
       datasets: [
         {
-          label: 'Pendapatan',
+          label: t.income,
           data: incomeData,
           backgroundColor: '#22c55e',
           borderRadius: 6
         },
         {
-          label: 'Perbelanjaan',
+          label: t.expense,
           data: expenseData,
           backgroundColor: '#ef4444',
           borderRadius: 6
@@ -554,7 +708,8 @@ function formatRM(num) {
 function formatDate(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('ms-MY', { day: 'numeric', month: 'short', year: 'numeric' });
+  const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
+  return d.toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 window.deleteTx = deleteTx;
