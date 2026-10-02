@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Money Tracker</title>
+  <title>ChiiTracker</title>
+  <link rel="icon" href="https://raw.githubusercontent.com/hzbllh/ChiiTracker/refs/heads/main/file_00000000acf881fab2ae92bfc793ac58.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -12,6 +13,9 @@
         extend: {
           colors: {
             primary: { 500: '#10b981', 600: '#059669', 700: '#047857' }
+          },
+          fontFamily: {
+            logo: ['system-ui', 'Segoe UI', 'Roboto', 'sans-serif']
           }
         }
       }
@@ -20,13 +24,21 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     html { scroll-behavior: smooth; }
-    #txList::-webkit-scrollbar { width: 6px; }
-    #txList::-webkit-scrollbar-track { background: transparent; }
-    #txList::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    .dark #txList::-webkit-scrollbar-thumb { background: #475569; }
+    #txList::-webkit-scrollbar, #archiveList::-webkit-scrollbar { width: 6px; }
+    #txList::-webkit-scrollbar-track, #archiveList::-webkit-scrollbar-track { background: transparent; }
+    #txList::-webkit-scrollbar-thumb, #archiveList::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .dark #txList::-webkit-scrollbar-thumb, .dark #archiveList::-webkit-scrollbar-thumb { background: #475569; }
     #balance, #totalIncome, #totalExpense { transition: color 0.3s ease; }
     .tx-item { transition: all 0.15s ease; }
     canvas { max-width: 100%; }
+    .logo-text {
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #facc15, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
@@ -35,8 +47,11 @@
   <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-gray-200 dark:border-gray-700">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <span class="text-2xl">💰</span>
-        <h1 class="text-xl font-bold" id="appTitle">Money Tracker</h1>
+        <img src="https://raw.githubusercontent.com/hzbllh/ChiiTracker/refs/heads/main/file_00000000acf881fab2ae92bfc793ac58.png" 
+             alt="ChiiTracker" class="w-10 h-10 rounded-full object-cover shadow-sm">
+        <h1 class="text-xl font-extrabold tracking-tight">
+          <span class="text-yellow-400">Chii</span><span class="text-gray-800 dark:text-white">Tracker</span>
+        </h1>
       </div>
       <div class="flex items-center gap-2">
         <select id="monthFilter" class="text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500"></select>
@@ -126,41 +141,59 @@
       <p id="emptyState" class="text-center text-gray-400 py-8 hidden">Belum ada transaksi. Tambah yang pertama!</p>
     </section>
 
+    <!-- Monthly Archive Section -->
+    <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold text-lg" id="labelArchive">Simpan Bulanan</h2>
+        <button id="btnSaveMonth" class="text-sm bg-primary-600 hover:bg-primary-700 text-white px-3 py-1.5 rounded-lg font-medium">Simpan Bulan Ini</button>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-3" id="archiveHelp">Simpan data bulan semasa. Boleh buka balik kemudian untuk lihat hari demi hari.</p>
+      <div id="archiveList" class="space-y-2 max-h-64 overflow-y-auto"></div>
+      <p id="emptyArchive" class="text-center text-gray-400 py-4 text-sm">Belum ada data bulanan disimpan.</p>
+    </section>
+
   </main>
 
   <footer class="text-center text-sm text-gray-400 py-6" id="footerText">
-    Money Tracker • Data disimpan di browser anda (localStorage)
+    ChiiTracker • Data disimpan di browser anda
   </footer>
 
 <script>
-const STORAGE_KEY = 'moneyTracker_transactions';
-const THEME_KEY = 'moneyTracker_theme';
-const LANG_KEY = 'moneyTracker_lang';
+const STORAGE_KEY = 'chiiTracker_transactions';
+const ARCHIVE_KEY = 'chiiTracker_archives';
+const THEME_KEY = 'chiiTracker_theme';
+const LANG_KEY = 'chiiTracker_lang';
 
 const translations = {
   ms: {
-    appTitle: 'Money Tracker', balance: 'Baki', income: 'Pendapatan', expense: 'Perbelanjaan',
+    appTitle: 'ChiiTracker', balance: 'Baki', income: 'Pendapatan', expense: 'Perbelanjaan',
     addTx: 'Tambah Transaksi', editTx: 'Edit Transaksi', type: 'Jenis', amount: 'Jumlah (RM)',
     category: 'Kategori', date: 'Tarikh', note: 'Nota (optional)', notePlaceholder: 'Contoh: Makan tengah hari',
     add: 'Tambah', update: 'Kemaskini', cancel: 'Batal', pie: 'Perbelanjaan ikut Kategori', bar: 'Trend Bulanan',
     list: 'Senarai Transaksi', clearAll: 'Padam Semua', empty: 'Belum ada transaksi. Tambah yang pertama!',
-    allMonths: 'Semua Bulan', noData: 'Tiada data', footer: 'Money Tracker • Data disimpan di browser anda (localStorage)',
+    allMonths: 'Semua Bulan', noData: 'Tiada data', footer: 'ChiiTracker • Data disimpan di browser anda',
     optExpense: 'Perbelanjaan', optIncome: 'Pendapatan',
     deleteConfirm: 'Padam transaksi ini?', clearConfirm: 'Padam SEMUA transaksi? Tindakan ini tidak boleh diundur.',
+    archive: 'Simpan Bulanan', saveMonth: 'Simpan Bulan Ini', archiveHelp: 'Simpan data bulan semasa. Boleh buka balik kemudian untuk lihat hari demi hari.',
+    emptyArchive: 'Belum ada data bulanan disimpan.', viewDay: 'Lihat Hari', close: 'Tutup',
+    saved: 'Bulan berjaya disimpan!', alreadySaved: 'Bulan ini sudah disimpan.',
     categories: {
       expense: { makan: 'Makanan', transport: 'Pengangkutan', belanja: 'Belanja', bil: 'Bil & Utiliti', hiburan: 'Hiburan', kesihatan: 'Kesihatan', lain: 'Lain-lain' },
       income: { gaji: 'Gaji', freelance: 'Freelance', hadiah: 'Hadiah / Bonus', 'lain-income': 'Lain-lain' }
     }
   },
   en: {
-    appTitle: 'Money Tracker', balance: 'Balance', income: 'Income', expense: 'Expense',
+    appTitle: 'ChiiTracker', balance: 'Balance', income: 'Income', expense: 'Expense',
     addTx: 'Add Transaction', editTx: 'Edit Transaction', type: 'Type', amount: 'Amount (RM)',
     category: 'Category', date: 'Date', note: 'Note (optional)', notePlaceholder: 'Example: Lunch',
     add: 'Add', update: 'Update', cancel: 'Cancel', pie: 'Expenses by Category', bar: 'Monthly Trend',
     list: 'Transaction List', clearAll: 'Clear All', empty: 'No transactions yet. Add your first one!',
-    allMonths: 'All Months', noData: 'No data', footer: 'Money Tracker • Data is stored in your browser (localStorage)',
+    allMonths: 'All Months', noData: 'No data', footer: 'ChiiTracker • Data is stored in your browser',
     optExpense: 'Expense', optIncome: 'Income',
     deleteConfirm: 'Delete this transaction?', clearConfirm: 'Delete ALL transactions? This cannot be undone.',
+    archive: 'Monthly Archive', saveMonth: 'Save This Month', archiveHelp: 'Save current month data. You can open it later to view day by day.',
+    emptyArchive: 'No monthly data saved yet.', viewDay: 'View Days', close: 'Close',
+    saved: 'Month saved successfully!', alreadySaved: 'This month is already saved.',
     categories: {
       expense: { makan: 'Food', transport: 'Transport', belanja: 'Shopping', bil: 'Bills & Utilities', hiburan: 'Entertainment', kesihatan: 'Health', lain: 'Others' },
       income: { gaji: 'Salary', freelance: 'Freelance', hadiah: 'Gift / Bonus', 'lain-income': 'Others' }
@@ -174,6 +207,7 @@ const CATEGORY_COLORS = {
 };
 
 let transactions = [];
+let archives = [];
 let pieChart = null;
 let barChart = null;
 let currentLang = 'ms';
@@ -183,22 +217,24 @@ document.addEventListener('DOMContentLoaded', () => {
   loadTheme();
   loadLang();
   loadTransactions();
+  loadArchives();
   setupForm();
   setupThemeToggle();
   setupLangToggle();
   setupMonthFilter();
   setupClearAll();
+  setupArchive();
   setDefaultDate();
   updateCategoryOptions();
   applyLanguage();
   render();
+  renderArchives();
 });
 
 function loadLang() { currentLang = localStorage.getItem(LANG_KEY) || 'ms'; }
 
 function applyLanguage() {
   const t = translations[currentLang];
-  document.getElementById('appTitle').textContent = t.appTitle;
   document.getElementById('labelBalance').textContent = t.balance;
   document.getElementById('labelIncome').textContent = t.income;
   document.getElementById('labelExpense').textContent = t.expense;
@@ -220,9 +256,14 @@ function applyLanguage() {
   document.getElementById('optExpense').textContent = t.optExpense;
   document.getElementById('optIncome').textContent = t.optIncome;
   document.getElementById('langToggle').textContent = currentLang === 'ms' ? 'EN' : 'BM';
+  document.getElementById('labelArchive').textContent = t.archive;
+  document.getElementById('btnSaveMonth').textContent = t.saveMonth;
+  document.getElementById('archiveHelp').textContent = t.archiveHelp;
+  document.getElementById('emptyArchive').textContent = t.emptyArchive;
   updateCategoryOptions();
   setupMonthFilter();
   render();
+  renderArchives();
 }
 
 function setupLangToggle() {
@@ -267,6 +308,15 @@ function saveTransactions() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
 }
 
+function loadArchives() {
+  const raw = localStorage.getItem(ARCHIVE_KEY);
+  archives = raw ? JSON.parse(raw) : [];
+}
+
+function saveArchives() {
+  localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archives));
+}
+
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 }
@@ -306,22 +356,21 @@ function setupForm() {
 
     if (!amount || amount <= 0) return;
 
+    const now = new Date();
+    const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
     if (editId) {
-      // Update existing
       const idx = transactions.findIndex(tx => tx.id === editId);
       if (idx !== -1) {
-        transactions[idx] = {
-          ...transactions[idx],
-          type, amount, category, date, note
-        };
+        transactions[idx] = { ...transactions[idx], type, amount, category, date, note };
       }
       cancelEdit();
     } else {
-      // Add new
       transactions.unshift({
         id: generateId(),
         type, amount, category, date, note,
-        createdAt: new Date().toISOString()
+        time: timeStr,
+        createdAt: now.toISOString()
       });
     }
 
@@ -338,7 +387,6 @@ function setupForm() {
 function startEdit(id) {
   const tx = transactions.find(t => t.id === id);
   if (!tx) return;
-
   editingId = id;
   document.getElementById('editId').value = id;
   document.getElementById('type').value = tx.type;
@@ -347,13 +395,10 @@ function startEdit(id) {
   document.getElementById('amount').value = tx.amount;
   document.getElementById('date').value = tx.date;
   document.getElementById('note').value = tx.note || '';
-
   const t = translations[currentLang];
   document.getElementById('labelAddTx').textContent = t.editTx;
   document.getElementById('btnAdd').textContent = t.update;
   document.getElementById('btnCancelEdit').classList.remove('hidden');
-
-  // Scroll to form
   document.getElementById('txForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
@@ -363,7 +408,6 @@ function cancelEdit() {
   document.getElementById('txForm').reset();
   setDefaultDate();
   updateCategoryOptions();
-
   const t = translations[currentLang];
   document.getElementById('labelAddTx').textContent = t.addTx;
   document.getElementById('btnAdd').textContent = t.add;
@@ -374,24 +418,20 @@ function setupMonthFilter() {
   const select = document.getElementById('monthFilter');
   const months = getAvailableMonths();
   const t = translations[currentLang];
-
   select.innerHTML = '';
   const allOpt = document.createElement('option');
   allOpt.value = 'all';
   allOpt.textContent = t.allMonths;
   select.appendChild(allOpt);
-
   months.forEach(m => {
     const opt = document.createElement('option');
     opt.value = m.value;
     opt.textContent = m.label;
     select.appendChild(opt);
   });
-
   const now = new Date();
   const current = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
   if (months.some(m => m.value === current)) select.value = current;
-
   select.onchange = render;
 }
 
@@ -403,7 +443,6 @@ function getAvailableMonths() {
   const now = new Date();
   const currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
   set.add(currentMonth);
-
   const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
   return Array.from(set).sort((a, b) => b.localeCompare(a)).map(v => {
     const parts = v.split('-');
@@ -435,7 +474,6 @@ function updateSummary(list) {
   document.getElementById('balance').textContent = formatRM(balance);
   document.getElementById('totalIncome').textContent = formatRM(income);
   document.getElementById('totalExpense').textContent = formatRM(expense);
-
   const balEl = document.getElementById('balance');
   balEl.classList.toggle('text-red-500', balance < 0);
   balEl.classList.toggle('dark:text-red-400', balance < 0);
@@ -446,14 +484,12 @@ function updateSummary(list) {
 function renderList(list) {
   const container = document.getElementById('txList');
   const empty = document.getElementById('emptyState');
-
   if (list.length === 0) {
     container.innerHTML = '';
     empty.classList.remove('hidden');
     return;
   }
   empty.classList.add('hidden');
-
   let html = '';
   list.forEach(tx => {
     const catName = getCategoryName(tx.type, tx.category);
@@ -462,33 +498,26 @@ function renderList(list) {
     const amountClass = isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
     const sign = isIncome ? '+' : '-';
     const noteHtml = tx.note ? '<p class="text-sm text-gray-600 dark:text-gray-300 mt-0.5 break-words">' + tx.note + '</p>' : '';
+    const timeHtml = tx.time ? '<span class="text-xs text-gray-400 ml-2">🕒 ' + tx.time + '</span>' : '';
 
     html += '<div class="tx-item p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">';
     html += '<div class="flex items-start gap-3">';
-    // Color circle
     html += '<div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-bold" style="background:' + color + '">' + catName.charAt(0) + '</div>';
-    // Content
     html += '<div class="flex-1 min-w-0">';
     html += '<div class="flex items-center justify-between gap-2">';
     html += '<p class="font-semibold text-base">' + catName + '</p>';
     html += '<p class="font-bold ' + amountClass + ' whitespace-nowrap">' + sign + ' ' + formatRM(tx.amount) + '</p>';
     html += '</div>';
-    html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">' + formatDate(tx.date) + '</p>';
+    html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">' + formatDate(tx.date) + timeHtml + '</p>';
     html += noteHtml;
-    html += '</div>';
-    html += '</div>';
-    // Action buttons
+    html += '</div></div>';
     html += '<div class="flex justify-end gap-3 mt-3 pt-2 border-t border-gray-200 dark:border-gray-600">';
     html += '<button onclick="startEdit(\'' + tx.id + '\')" class="text-sm text-blue-500 hover:text-blue-600 font-medium">✏️ Edit</button>';
     html += '<button onclick="deleteTx(\'' + tx.id + '\')" class="text-sm text-red-500 hover:text-red-600 font-medium">🗑️ Padam</button>';
-    html += '</div>';
-    html += '</div>';
+    html += '</div></div>';
   });
-
   container.innerHTML = html;
-}
-
-function getCategoryName(type, id) {
+}function getCategoryName(type, id) {
   const cats = translations[currentLang].categories[type];
   return (cats && cats[id]) ? cats[id] : id;
 }
@@ -513,6 +542,125 @@ function setupClearAll() {
   });
 }
 
+// ---------- Monthly Archive ----------
+function setupArchive() {
+  document.getElementById('btnSaveMonth').addEventListener('click', saveCurrentMonth);
+}
+
+function saveCurrentMonth() {
+  const t = translations[currentLang];
+  const now = new Date();
+  const monthKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+  const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
+  const monthLabel = now.toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+
+  // Check if already saved
+  if (archives.some(a => a.monthKey === monthKey)) {
+    alert(t.alreadySaved);
+    return;
+  }
+
+  // Get this month transactions
+  const monthTx = transactions.filter(tx => tx.date && tx.date.startsWith(monthKey));
+  
+  let income = 0, expense = 0;
+  monthTx.forEach(tx => {
+    if (tx.type === 'income') income += tx.amount;
+    else expense += tx.amount;
+  });
+
+  archives.unshift({
+    id: generateId(),
+    monthKey: monthKey,
+    label: monthLabel,
+    transactions: JSON.parse(JSON.stringify(monthTx)),
+    income: income,
+    expense: expense,
+    balance: income - expense,
+    savedAt: new Date().toISOString()
+  });
+
+  saveArchives();
+  renderArchives();
+  alert(t.saved);
+}
+
+function renderArchives() {
+  const container = document.getElementById('archiveList');
+  const empty = document.getElementById('emptyArchive');
+  const t = translations[currentLang];
+
+  if (archives.length === 0) {
+    container.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  let html = '';
+  archives.forEach(arch => {
+    html += '<div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">';
+    html += '<div class="flex items-center justify-between">';
+    html += '<div>';
+    html += '<p class="font-semibold">' + arch.label + '</p>';
+    html += '<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">';
+    html += t.income + ': ' + formatRM(arch.income) + ' | ' + t.expense + ': ' + formatRM(arch.expense);
+    html += '</p></div>';
+    html += '<button onclick="viewArchive(\'' + arch.id + '\')" class="text-sm text-primary-600 hover:text-primary-700 font-medium">' + t.viewDay + '</button>';
+    html += '</div>';
+    html += '<div id="archDetail-' + arch.id + '" class="hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function viewArchive(id) {
+  const arch = archives.find(a => a.id === id);
+  if (!arch) return;
+  const detail = document.getElementById('archDetail-' + id);
+  const t = translations[currentLang];
+
+  if (!detail.classList.contains('hidden')) {
+    detail.classList.add('hidden');
+    return;
+  }
+
+  // Group by day
+  const byDay = {};
+  arch.transactions.forEach(tx => {
+    if (!byDay[tx.date]) byDay[tx.date] = [];
+    byDay[tx.date].push(tx);
+  });
+
+  const days = Object.keys(byDay).sort((a, b) => b.localeCompare(a));
+  let html = '';
+
+  days.forEach(day => {
+    html += '<div class="mb-2">';
+    html += '<p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">' + formatDate(day) + '</p>';
+    byDay[day].forEach(tx => {
+      const catName = getCategoryName(tx.type, tx.category);
+      const isIncome = tx.type === 'income';
+      const amountClass = isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+      const sign = isIncome ? '+' : '-';
+      const timeStr = tx.time ? ' • ' + tx.time : '';
+      html += '<div class="flex justify-between text-sm py-1">';
+      html += '<span>' + catName + (tx.note ? ' • ' + tx.note : '') + timeStr + '</span>';
+      html += '<span class="font-medium ' + amountClass + '">' + sign + ' ' + formatRM(tx.amount) + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+
+  if (days.length === 0) {
+    html = '<p class="text-sm text-gray-400">' + t.noData + '</p>';
+  }
+
+  detail.innerHTML = html;
+  detail.classList.remove('hidden');
+}
+
+// ---------- Charts ----------
 function updateCharts() {
   const filtered = getFilteredTransactions();
   updatePieChart(filtered);
@@ -614,6 +762,7 @@ function formatDate(dateStr) {
 
 window.deleteTx = deleteTx;
 window.startEdit = startEdit;
+window.viewArchive = viewArchive;
 </script>
 </body>
 </html>
