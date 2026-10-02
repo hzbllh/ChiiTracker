@@ -9,20 +9,16 @@
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: {
-        extend: {
-          colors: { primary: { 500: '#10b981', 600: '#059669', 700: '#047857' } }
-        }
-      }
+      theme: { extend: { colors: { primary: { 500: '#10b981', 600: '#059669', 700: '#047857' } } } }
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     html { scroll-behavior: smooth; }
-    #txList::-webkit-scrollbar { width: 6px; }
-    #txList::-webkit-scrollbar-track { background: transparent; }
-    #txList::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-    .dark #txList::-webkit-scrollbar-thumb { background: #475569; }
+    #txList::-webkit-scrollbar, #historyList::-webkit-scrollbar { width: 6px; }
+    #txList::-webkit-scrollbar-track, #historyList::-webkit-scrollbar-track { background: transparent; }
+    #txList::-webkit-scrollbar-thumb, #historyList::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .dark #txList::-webkit-scrollbar-thumb, .dark #historyList::-webkit-scrollbar-thumb { background: #475569; }
     .tx-item { transition: all 0.15s ease; }
     canvas { max-width: 100%; }
   </style>
@@ -111,7 +107,7 @@
     <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-lg" id="labelList">Senarai Transaksi</h2>
-        <div class="flex gap-2">
+        <div class="flex gap-2 flex-wrap">
           <button id="btnShareWA" class="text-sm bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg">WhatsApp</button>
           <button id="btnShareTG" class="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg">Telegram</button>
           <button id="clearAll" class="text-sm text-red-500 hover:text-red-600 font-medium">Padam Semua</button>
@@ -119,6 +115,14 @@
       </div>
       <div id="txList" class="space-y-3 max-h-[28rem] overflow-y-auto"></div>
       <p id="emptyState" class="text-center text-gray-400 py-8 hidden">Belum ada transaksi.</p>
+    </section>
+
+    <!-- Sejarah Bulanan (Auto) -->
+    <section class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
+      <h2 class="font-semibold text-lg mb-2" id="labelHistory">Sejarah Bulanan</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4" id="historyHelp">Auto disimpan. Klik bulan untuk lihat hari demi hari. Boleh kongsi terus.</p>
+      <div id="historyList" class="space-y-2 max-h-80 overflow-y-auto"></div>
+      <p id="emptyHistory" class="text-center text-gray-400 py-4 text-sm hidden">Belum ada data.</p>
     </section>
 
   </main>
@@ -136,10 +140,12 @@ const translations = {
     addTx: 'Tambah Transaksi', editTx: 'Edit Transaksi', type: 'Jenis', amount: 'Jumlah (RM)',
     category: 'Kategori', date: 'Tarikh', note: 'Nota (optional)', notePlaceholder: 'Contoh: Makan tengah hari',
     add: 'Tambah', update: 'Kemaskini', cancel: 'Batal', pie: 'Perbelanjaan ikut Kategori', bar: 'Trend Bulanan',
-    list: 'Senarai Transaksi', clearAll: 'Padam Semua', empty: 'Belum ada transaksi. Tambah yang pertama!',
+    list: 'Senarai Transaksi', clearAll: 'Padam Semua', empty: 'Belum ada transaksi.',
     allMonths: 'Semua Bulan', noData: 'Tiada data', footer: 'ChiiTracker • Data disimpan di browser anda',
     optExpense: 'Perbelanjaan', optIncome: 'Pendapatan',
     deleteConfirm: 'Padam transaksi ini?', clearConfirm: 'Padam SEMUA transaksi?',
+    history: 'Sejarah Bulanan', historyHelp: 'Auto disimpan. Klik bulan untuk lihat hari demi hari. Boleh kongsi terus.',
+    viewDays: 'Lihat Hari', share: 'Kongsi',
     categories: {
       expense: { makan: 'Makanan', transport: 'Pengangkutan', belanja: 'Belanja', bil: 'Bil & Utiliti', hiburan: 'Hiburan', kesihatan: 'Kesihatan', lain: 'Lain-lain' },
       income: { gaji: 'Gaji', freelance: 'Freelance', hadiah: 'Hadiah / Bonus', 'lain-income': 'Lain-lain' }
@@ -154,6 +160,8 @@ const translations = {
     allMonths: 'All Months', noData: 'No data', footer: 'ChiiTracker • Data is stored in your browser',
     optExpense: 'Expense', optIncome: 'Income',
     deleteConfirm: 'Delete this transaction?', clearConfirm: 'Delete ALL transactions?',
+    history: 'Monthly History', historyHelp: 'Auto saved. Click month to view day by day. You can share directly.',
+    viewDays: 'View Days', share: 'Share',
     categories: {
       expense: { makan: 'Food', transport: 'Transport', belanja: 'Shopping', bil: 'Bills & Utilities', hiburan: 'Entertainment', kesihatan: 'Health', lain: 'Others' },
       income: { gaji: 'Salary', freelance: 'Freelance', hadiah: 'Gift / Bonus', 'lain-income': 'Others' }
@@ -202,6 +210,8 @@ function applyLanguage() {
   document.getElementById('optExpense').textContent = t.optExpense;
   document.getElementById('optIncome').textContent = t.optIncome;
   document.getElementById('langToggle').textContent = currentLang === 'ms' ? 'EN' : 'BM';
+  document.getElementById('labelHistory').textContent = t.history;
+  document.getElementById('historyHelp').textContent = t.historyHelp;
   updateCategoryOptions(); setupMonthFilter(); render();
 }
 
@@ -366,6 +376,7 @@ function getFilteredTransactions() {
   updateSummary(filtered);
   renderList(filtered);
   updateCharts();
+  renderHistory();
 }
 
 function updateSummary(list) {
@@ -433,39 +444,120 @@ function setupClearAll() {
   });
 }
 
-// ---------- Share to WhatsApp / Telegram ----------
-function setupShare() {
-  document.getElementById('btnShareWA').addEventListener('click', () => shareData('wa'));
-  document.getElementById('btnShareTG').addEventListener('click', () => shareData('tg'));
+// ---------- Sejarah Bulanan (Auto) ----------
+function renderHistory() {
+  const container = document.getElementById('historyList');
+  const empty = document.getElementById('emptyHistory');
+  const t = translations[currentLang];
+  const months = getAvailableMonths().filter(m => m.value !== 'all');
+
+  // Only months that actually have data
+  const monthsWithData = months.filter(m => transactions.some(tx => tx.date && tx.date.startsWith(m.value)));
+
+  if (monthsWithData.length === 0) {
+    container.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  let html = '';
+  monthsWithData.forEach(m => {
+    const monthTx = transactions.filter(tx => tx.date && tx.date.startsWith(m.value));
+    let income = 0, expense = 0;
+    monthTx.forEach(tx => { if (tx.type === 'income') income += tx.amount; else expense += tx.amount; });
+
+    html += '<div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-700/50 border border-gray-100 dark:border-gray-600">';
+    html += '<div class="flex items-center justify-between flex-wrap gap-2">';
+    html += '<div><p class="font-semibold">' + m.label + '</p>';
+    html += '<p class="text-xs text-gray-500 dark:text-gray-400">' + t.income + ': ' + formatRM(income) + ' | ' + t.expense + ': ' + formatRM(expense) + '</p></div>';
+    html += '<div class="flex gap-2">';
+    html += '<button onclick="toggleMonthDays(\'' + m.value + '\')" class="text-sm text-primary-600 font-medium">' + t.viewDays + '</button>';
+    html += '<button onclick="shareMonth(\'' + m.value + '\',\'wa\')" class="text-xs bg-green-500 text-white px-2 py-1 rounded">WA</button>';
+    html += '<button onclick="shareMonth(\'' + m.value + '\',\'tg\')" class="text-xs bg-blue-500 text-white px-2 py-1 rounded">TG</button>';
+    html += '</div></div>';
+    html += '<div id="days-' + m.value + '" class="hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 space-y-2"></div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
 }
 
-function shareData(platform) {
-  const filtered = getFilteredTransactions();
-  const monthLabel = document.getElementById('monthFilter').selectedOptions[0].text;
-  let income = 0, expense = 0;
-  filtered.forEach(tx => { if (tx.type === 'income') income += tx.amount; else expense += tx.amount; });
+function toggleMonthDays(monthKey) {
+  const detail = document.getElementById('days-' + monthKey);
+  if (!detail.classList.contains('hidden')) {
+    detail.classList.add('hidden');
+    return;
+  }
+  const monthTx = transactions.filter(tx => tx.date && tx.date.startsWith(monthKey));
+  const byDay = {};
+  monthTx.forEach(tx => {
+    if (!byDay[tx.date]) byDay[tx.date] = [];
+    byDay[tx.date].push(tx);
+  });
+  const days = Object.keys(byDay).sort((a,b) => b.localeCompare(a));
+  let html = '';
+  days.forEach(day => {
+    html += '<div class="mb-2"><p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">' + formatDate(day) + '</p>';
+    byDay[day].forEach(tx => {
+      const cat = getCategoryName(tx.type, tx.category);
+      const isIncome = tx.type === 'income';
+      const amountClass = isIncome ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+      const sign = isIncome ? '+' : '-';
+      const time = tx.time ? ' • ' + tx.time : '';
+      html += '<div class="flex justify-between text-sm py-0.5">';
+      html += '<span>' + cat + (tx.note ? ' - ' + tx.note : '') + time + '</span>';
+      html += '<span class="font-medium ' + amountClass + '">' + sign + ' ' + formatRM(tx.amount) + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  detail.innerHTML = html || '<p class="text-sm text-gray-400">' + translations[currentLang].noData + '</p>';
+  detail.classList.remove('hidden');
+}
 
-  let text = '💰 *ChiiTracker* - ' + monthLabel + '\n\n';
+// ---------- Share ----------
+function setupShare() {
+  document.getElementById('btnShareWA').addEventListener('click', () => shareCurrent('wa'));
+  document.getElementById('btnShareTG').addEventListener('click', () => shareCurrent('tg'));
+}
+
+function shareCurrent(platform) {
+  const month = document.getElementById('monthFilter').value;
+  if (month === 'all') {
+    // share current month
+    const now = new Date();
+    const key = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+    shareMonth(key, platform);
+  } else {
+    shareMonth(month, platform);
+  }
+}
+
+function shareMonth(monthKey, platform) {
+  const list = transactions.filter(tx => tx.date && tx.date.startsWith(monthKey));
+  const locale = currentLang === 'ms' ? 'ms-MY' : 'en-US';
+  const parts = monthKey.split('-');
+  const label = new Date(parseInt(parts[0]), parseInt(parts[1])-1, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+
+  let income = 0, expense = 0;
+  list.forEach(tx => { if (tx.type === 'income') income += tx.amount; else expense += tx.amount; });
+
+  let text = '💰 *ChiiTracker* - ' + label + '\n\n';
   text += '📈 Pendapatan: ' + formatRM(income) + '\n';
   text += '📉 Perbelanjaan: ' + formatRM(expense) + '\n';
-  text += '💵 Baki: ' + formatRM(income - expense) + '\n\n';
-  text += '--- Senarai ---\n';
+  text += '💵 Baki: ' + formatRM(income - expense) + '\n\n--- Senarai ---\n';
 
-  filtered.forEach(tx => {
+  list.forEach(tx => {
     const cat = getCategoryName(tx.type, tx.category);
     const sign = tx.type === 'income' ? '+' : '-';
     const time = tx.time ? ' (' + tx.time + ')' : '';
     text += formatDate(tx.date) + time + ' | ' + cat + (tx.note ? ' - ' + tx.note : '') + ' | ' + sign + formatRM(tx.amount) + '\n';
   });
-
   text += '\n_Dijana oleh ChiiTracker_';
 
   const encoded = encodeURIComponent(text);
-  if (platform === 'wa') {
-    window.open('https://wa.me/?text=' + encoded, '_blank');
-  } else {
-    window.open('https://t.me/share/url?url=&text=' + encoded, '_blank');
-  }
+  if (platform === 'wa') window.open('https://wa.me/?text=' + encoded, '_blank');
+  else window.open('https://t.me/share/url?url=&text=' + encoded, '_blank');
 }
 
 function updateCharts() {
@@ -549,6 +641,8 @@ function formatDate(dateStr) {
 
 window.deleteTx = deleteTx;
 window.startEdit = startEdit;
+window.toggleMonthDays = toggleMonthDays;
+window.shareMonth = shareMonth;
 </script>
 </body>
 </html>
